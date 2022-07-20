@@ -8,7 +8,8 @@
 #SBATCH --job-name=mummer
 #SBATCH --array=0-54
 
-# Run whole geneome assembly mummer alignments by chromosome
+
+### Run whole geneome assembly mummer alignment by chromosome & filter by 20 Kbp length
 source mummer-3.23
 
 chromosome="1A"
