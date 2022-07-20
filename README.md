@@ -1,0 +1,1 @@
+# analysis to detect Triticum monococcum into domesticated hexaploid wheat.
