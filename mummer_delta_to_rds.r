@@ -1,4 +1,4 @@
-### Scripts covert Delta files from mummer alignments adapted from:
+### Scripts to covert Delta files from mummer alignments to rds files, adapted from:
 # https://jmonlong.github.io/Hippocamplus/2017/09/19/mummerplots-with-ggplot2/
 # https://github.com/Uauy-Lab/pangenome-haplotypes/blob/master/haplotype-block-assignment/assign_mummer_blocks_whole_genome.r
 
