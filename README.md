@@ -47,17 +47,17 @@ python3 combine_by_windows.py -i metadata.tsv -r reference_name -w 50000 -s vari
 
 The list below of the variations tables combined by chrosmosome & reference are public available ``` here(link)```
 
-	- arinalrfor_combined_queries_50000w.tsv.gz
-	- chinese_combined_queries_50000w.tsv.gz
-	- jagger_combined_queries_50000w.tsv.gz
-	- julius_combined_queries_50000w.tsv.gz
-	- lancer_combined_queries_50000w.tsv.gz
-	- landmark_combined_queries_50000w.tsv.gz
-	- mace_combined_queries_50000w.tsv.gz
-	- norin61_combined_queries_50000w.tsv.gz
-	- spelta_combined_queries_50000w.tsv.gz
-	- stanley_combined_queries_50000w.tsv.gz
-	- sy_mattis_combined_queries_50000w.tsv.gz
+	* arinalrfor_combined_queries_50000w.tsv.gz
+	* chinese_combined_queries_50000w.tsv.gz
+	* jagger_combined_queries_50000w.tsv.gz
+	* julius_combined_queries_50000w.tsv.gz
+	* lancer_combined_queries_50000w.tsv.gz
+	* landmark_combined_queries_50000w.tsv.gz
+	* mace_combined_queries_50000w.tsv.gz
+	* norin61_combined_queries_50000w.tsv.gz
+	* spelta_combined_queries_50000w.tsv.gz
+	* stanley_combined_queries_50000w.tsv.gz
+	* sy_mattis_combined_queries_50000w.tsv.gz
 
 
 4. Define monococcum introgressions.\
