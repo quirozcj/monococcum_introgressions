@@ -1,0 +1,7 @@
+reference	query	file	path
+reference1	accesion1	accesion1_vs_reference1_50000.tsv.tsv	path/IBS_output/reference1/
+reference1	accesion2	accesion2_vs_reference1_50000.tsv.tsv	path/IBS_output/reference1/
+reference1	accesion3	accesion3_vs_reference1_50000.tsv.tsv	path/IBS_output/reference1/
+reference2	accesion1	accesion1_vs_reference2_50000.tsv.tsv	path/IBS_output/reference2/
+reference2	accesion2	accesion2_vs_reference2_50000.tsv.tsv	path/IBS_output/reference2/
+reference2	accesion3	accesion3_vs_reference2_50000.tsv.tsv	path/IBS_output/reference2/
