@@ -26,7 +26,7 @@ kmc -k31 -ci1 -m30 -t5 -fq <(ls -d $in_dir/*.gz) accesion_id out_dir
 ```
 
 2. Detect variations.
-We employed IBSpy (IBSpy-0.3.1) to quantify variaitons per 50kb windows.\
+We employed IBSpy (IBSpy-0.3.1) to quantify variaitons per 50kb windows.
 	* ``` script: run_IBSpy.sh ```\
 For details about how IBSpy detects variaitons, please, read the documentation [here](https://github.com/Uauy-Lab/IBSpy)
 
@@ -46,7 +46,7 @@ python3 combine_by_windows.py -i metadata.tsv -r reference_name -w 50000 -s vari
 ```
 
 The list below of the variations tables combined by chrosmosome & reference are public available ``` here(link)```
-	```
+
 	- arinalrfor_combined_queries_50000w.tsv.gz
 	- chinese_combined_queries_50000w.tsv.gz
 	- jagger_combined_queries_50000w.tsv.gz
@@ -58,7 +58,7 @@ The list below of the variations tables combined by chrosmosome & reference are 
 	- spelta_combined_queries_50000w.tsv.gz
 	- stanley_combined_queries_50000w.tsv.gz
 	- sy_mattis_combined_queries_50000w.tsv.gz
-	```
+
 
 4. Define monococcum introgressions.\
 To proces downstream data and define introgressions we use python & R notebook scripts.
