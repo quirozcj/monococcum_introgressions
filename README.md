@@ -59,7 +59,6 @@ The list below of the variations tables combined by chrosmosome & reference are 
 	* stanley_combined_queries_50000w.tsv.gz
 	* sy_mattis_combined_queries_50000w.tsv.gz
 
-
 4. Define monococcum introgressions.\
 To proces downstream data and define introgressions we use python & R notebook scripts.
 Please, see ``` monococcum_min_variations.ipynb ``` jupyther notebooks and R scripts for detailed description.
