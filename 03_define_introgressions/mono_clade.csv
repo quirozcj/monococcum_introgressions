@@ -1,0 +1,244 @@
+genotype,clade,group
+X2764,mono_green,clade_ 5
+X23764,mono_green,clade_ 5
+X26611,mono_green,clade_ 4
+X26623,mono_blue,blue
+X26886,mono_blue,blue
+TA10415,alpha_Yellow,alpha
+TA10418,mono_blue,blue
+TA10546,gamma_red,gamma
+TA10548,mono_green,clade_ 2
+TA10558,mono_green,clade_ 3
+TA10559,mono_green,clade_ 3
+TA10562,mono_green,clade_ 5
+TA10565,mono_green,clade_ 3
+TA10569,mono_green,clade_ 7
+TA10570,beta_green,beta
+TA10573,beta_red,beta
+TA10574,mono_blue,blue
+TA10576,mono_blue,blue
+TA10577,mono_green,clade_ 1
+TA10581,mono_green,clade_ 4
+TA10583,mono_green,clade_ 4
+TA10585,gamma_red,gamma
+TA10588,mono_blue,blue
+TA10589,mono_blue,blue
+TA10590,mono_blue,blue
+TA10591,mono_blue,blue
+TA10593,alpha_Yellow,alpha
+TA10595,gamma_red,gamma
+TA10597,gamma_red,gamma
+TA10598,mono_green,clade_ 6
+TA10600,gamma_red,gamma
+TA10602,gamma_red,gamma
+TA10603,gamma_red,gamma
+TA10604,mono_green,clade_ 6
+TA10607,mono_blue,blue
+TA10612,mono_green,clade_ 3
+TA10620,mono_green,clade_ 4
+TA10622,mono_green,clade_ 3
+TA10624,mono_green,clade_ 3
+TA10625,mono_green,clade_ 3
+TA10626,mono_green,clade_ 4
+TA10628,mono_green,clade_ 5
+TA10629,mono_green,clade_ 5
+TA10630,mono_green,clade_ 5
+TA10636,mono_green,clade_ 4
+TA10637,mono_green,alone
+TA10640,mono_green,clade_ 5
+TA10644,mono_green,clade_ 7
+TA10652,mono_green,clade_ 6
+TA10657,mono_blue,blue
+TA10867,alpha_Yellow,alpha
+TA10888,alpha_Yellow,alpha
+TA10895,mono_blue,blue
+TA10896,mono_blue,blue
+TA10901,alpha_Yellow,alpha
+TA10902,alpha_Yellow,alpha
+TA10904,alpha_Yellow,alpha
+TA10907,gamma_red,gamma
+TA10909,gamma_red,gamma
+TA10910,beta_gray,beta
+TA10912,alpha_Yellow,alpha
+TA10913,alpha_Yellow,alpha
+TA11012,gamma_red,gamma
+TA11015,gamma_red,gamma
+TA11038,alpha_Purple,alpha
+TA1207,alpha_Purple,alpha
+TA1208,alpha_Yellow,alpha
+TA1211,alpha_Yellow,alpha
+TA1221,alpha_Yellow,alpha
+TA1228,alpha_Yellow,alpha
+TA1230,alpha_Yellow,alpha
+TA1235,beta_gray,beta
+TA1236,beta_gray,beta
+TA1254,alpha_Yellow,alpha
+TA1260,alpha_Yellow,alpha
+TA1264,gamma_red,gamma
+TA1324,gamma_red,gamma
+TA1334,alpha_Yellow,alpha
+TA1340,alpha_Yellow,alpha
+TA1348,alpha_Yellow,alpha
+TA1353,alpha_Purple,alpha
+TA1354,alpha_Purple,alpha
+TA1366,alpha_Yellow,alpha
+TA139,mono_green,clade_ 6
+TA141,mono_blue,blue
+TA176,alpha_Yellow,alpha
+TA177,beta_gray,beta
+TA182,alpha_Yellow,alpha
+TA184,alpha_Yellow,alpha
+TA186,alpha_Yellow,alpha
+TA189,alpha_Yellow,alpha
+TA190,alpha_Yellow,alpha
+TA192,alpha_Yellow,alpha
+TA193,alpha_Purple,alpha
+TA194,alpha_Purple,alpha
+TA2002,alpha_Yellow,alpha
+TA2005,gamma_red,gamma
+TA2008,gamma_red,gamma
+TA2009,gamma_red,gamma
+TA2011,gamma_red,gamma
+TA2021,alpha_Purple,alpha
+TA2030,mono_green,clade_ 4
+TA2032,mono_blue,blue
+TA2033,mono_green,clade_ 3
+TA2035,mono_green,clade_ 4
+TA2039,mono_blue,blue
+TA210,gamma_red,gamma
+TA228,alpha_Yellow,alpha
+TA229,alpha_Purple,alpha
+TA240,alpha_Purple,alpha
+TA245,alpha_Purple,alpha
+TA249,alpha_Purple,alpha
+TA250,alpha_Purple,alpha
+TA251,alpha_Purple,alpha
+TA2703,mono_green,clade_ 2
+TA2705,mono_green,clade_ 3
+TA2706,mono_green,clade_ 4
+TA2708,mono_green,clade_ 3
+TA2716,mono_green,clade_ 3
+TA2717,mono_green,clade_ 5
+TA2719,mono_green,clade_ 1
+TA2720,mono_green,clade_ 6
+TA2721,mono_blue,blue
+TA2723,mono_green,clade_ 7
+TA2724,mono_green,clade_ 3
+TA2725,mono_green,clade_ 3
+TA277,alpha_Purple,alpha
+TA278,alpha_Purple,alpha
+TA284,alpha_Purple,alpha
+TA285,alpha_Purple,alpha
+TA286,beta_gray,beta
+TA289,alpha_Yellow,alpha
+TA297,alpha_Yellow,alpha
+TA299,alpha_Yellow,alpha
+TA309,alpha_Yellow,alpha
+TA316,alpha_Purple,alpha
+TA329,alpha_Yellow,alpha
+TA330,alpha_Yellow,alpha
+TA346,alpha_Purple,alpha
+TA349,alpha_Purple,alpha
+TA353,alpha_Purple,alpha
+TA357,alpha_Yellow,alpha
+TA365,alpha_Yellow,alpha
+TA366,alpha_Yellow,alpha
+TA367,alpha_Yellow,alpha
+TA372,alpha_Yellow,alpha
+TA378,alpha_Yellow,alpha
+TA385,alpha_Yellow,alpha
+TA388,alpha_Purple,alpha
+TA394,alpha_Purple,alpha
+TA395,alpha_Purple,alpha
+TA396,alpha_Purple,alpha
+TA398,alpha_Purple,alpha
+TA403,alpha_Purple,alpha
+TA404,alpha_Yellow,alpha
+TA408,alpha_Purple,alpha
+TA428,alpha_Purple,alpha
+TA438,alpha_Yellow,alpha
+TA443,alpha_Yellow,alpha
+TA453,alpha_Yellow,alpha
+TA454,alpha_Yellow,alpha
+TA458,alpha_Yellow,alpha
+TA466,alpha_Yellow,alpha
+TA473,alpha_Yellow,alpha
+TA474,alpha_Yellow,alpha
+TA477,alpha_Yellow,alpha
+TA479,alpha_Yellow,alpha
+TA480,alpha_Yellow,alpha
+TA482,alpha_Yellow,alpha
+TA487,alpha_Purple,alpha
+TA488,alpha_Purple,alpha
+TA490,alpha_Purple,alpha
+TA496,alpha_Purple,alpha
+TA497,alpha_Purple,alpha
+TA502,alpha_Purple,alpha
+TA512,alpha_Purple,alpha
+TA515,alpha_Yellow,alpha
+TA521,alpha_Yellow,alpha
+TA525,alpha_Yellow,alpha
+TA526,alpha_Yellow,alpha
+TA527,alpha_Yellow,alpha
+TA528,gamma_red,gamma
+TA530,alpha_Yellow,alpha
+TA533,alpha_Yellow,alpha
+TA544,alpha_Yellow,alpha
+TA562,alpha_Yellow,alpha
+TA569,gamma_red,gamma
+TA571,gamma_red,gamma
+TA578,gamma_red,gamma
+TA580,mono_green,clade_ 2
+TA582,gamma_red,gamma
+TA584,gamma_red,gamma
+TA588,alpha_Yellow,alpha
+TA590,alpha_Yellow,alpha
+TA599,alpha_Yellow,alpha
+TA602,alpha_Yellow,alpha
+TA615,alpha_Yellow,alpha
+TA616,alpha_Yellow,alpha
+TA617,alpha_Yellow,alpha
+TA618,alpha_Yellow,alpha
+TA632,alpha_Yellow,alpha
+TA634,alpha_Yellow,alpha
+TA637,alpha_Yellow,alpha
+TA640,alpha_Yellow,alpha
+TA643,alpha_Yellow,alpha
+TA647,alpha_Yellow,alpha
+TA661,beta_gray,beta
+TA667,alpha_Yellow,alpha
+TA680,alpha_Yellow,alpha
+TA694,beta_gray,beta
+TA695,alpha_Purple,alpha
+TA748,alpha_Yellow,alpha
+TA752,alpha_Yellow,alpha
+TA754,alpha_Yellow,alpha
+TA755,alpha_Yellow,alpha
+TA756,alpha_Yellow,alpha
+TA757,alpha_Yellow,alpha
+TA759,alpha_Yellow,alpha
+TA10622.pg,pangenome_wild,pan
+TA299.pg,pangenome_wild,pan
+arina.pg,pangenome,pan
+chinese.pg,pangenome,pan
+jagger.pg,pangenome,pan
+julius.pg,pangenome,pan
+lancer.pg,pangenome,pan
+landmark.pg,pangenome,pan
+mace.pg,pangenome,pan
+mattis.pg,pangenome,pan
+norin61.pg,pangenome,pan
+spelt.pg,pangenome_wild,pan
+stanley.pg,pangenome,pan
+claire2,pangenome,pan
+paragon2,pangenome,pan
+robigus2,pangenome,pan
+weebil2,pangenome,pan
+cadenza2,pangenome,pan
+kariega.pg,pangenome,pan
+zavitan.pg,pangenome_wild,pan
+borlaug.pg,pangenome,pan
+renan.pg,pangenome,pan
+dicoccoides.10x_nuq,pangenome_wild,pan
+urartu.pg,pangenome_wild,pan
+svevo.pg,pangenome_wild,pan

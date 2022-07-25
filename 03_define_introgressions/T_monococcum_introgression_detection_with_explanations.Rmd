@@ -1,0 +1,155 @@
+---
+title: "Monococcum Intogression Detection"
+author: "Cristobal Uauy"
+date: '2022-07-15'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(ggplot2)
+library(dplyr) 
+library(tidyverse)
+
+# First bind all the chromosome data together. There are seven files, one per chromosome, using each of the bread wheat pangenomes (Walkowiak et al 2020) as the reference for the IBSpy pipeline. The variation files include the chromosome name (seqname), start and end of the 50-kbp window (based on the corresponding reference genome assembly), the minimum IBSpy variation value across the 218 T. monococcum accession and two assemblies (monoccoccum_min), the actual IBSpy variations for each of the 220 monococcum datasets, and then the IBSpy variation data for the pangenome cultivars. The code below is using cultivar Stanley as the reference.    
+
+
+setwd("W:\\quirozj\\09_watseq\\15_alignments_to_ibspy\\variations_tables\\stanley")
+
+stanley_1A  <- read.table(file = "stanley_1A_variations_all_genotypes.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+stanley_2A  <- read.table(file = "stanley_2A_variations_all_genotypes.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+stanley_3A  <- read.table(file = "stanley_3A_variations_all_genotypes.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+stanley_4A  <- read.table(file = "stanley_4A_variations_all_genotypes.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+stanley_5A  <- read.table(file = "stanley_5A_variations_all_genotypes.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+stanley_6A  <- read.table(file = "stanley_6A_variations_all_genotypes.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+stanley_7A  <- read.table(file = "stanley_7A_variations_all_genotypes.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+stanley_all = rbind(stanley_1A, stanley_2A, stanley_3A, stanley_4A, stanley_5A, stanley_6A,stanley_7A)
+
+stanley_all$seqname <- as.factor(stanley_all$seqname)
+#stanley_all$start <- as.numeric(stanley_all$start)
+#stanley_all$end <- as.numeric(stanley_all$end)
+stanley_all$monoccoccum_min <- as.numeric(stanley_all$monoccoccum_min)
+
+options(pillar.sigfig = 6)
+
+# Check that the start and end of the file are correct after binding. 
+head(stanley_all)
+tail(stanley_all)
+
+
+```
+
+
+```{r fig.width=15, fig.height=20, echo=FALSE, warning = FALSE,}
+
+# We generate a per chromosome view of T. monococcum introgressions based on the  'monoccoccum_min' <=30 criteria. 50-kbp windows with IBSpy variation values over 30 are coloured in blue/teal whereas those 50-kbp windows with values <=30 are coloured in purple. Note log2 scale on Y-axis. 
+
+
+stanley_all  %>%  mutate(Introgression = ifelse(monoccoccum_min <=30, "Yes", "No")) %>% ggplot(aes(x=start, y = monoccoccum_min, colour = Introgression)) + geom_jitter(width = 0.3, size=2, alpha=0.9) +  scale_y_continuous(trans='log2') + geom_hline(aes(yintercept = 30, color = '30')) + geom_hline(aes(yintercept = 120, color = '120')) + labs(title="monococcum introgressions in stanley (<=30 variations)",x ="Mbp", y = "variations (log2)") + facet_grid(seqname ~ .)
+
+
+```
+
+
+
+```{r fig.width=15, fig.height=20, echo=FALSE, warning = FALSE,}
+
+# Function to loop across the file to assign contiguous introgression blocks. The criteria were (a) any 50-kbp window with variations <=30 is considered an introgression and (b) we linked introgression windows if they were separated by less than 10 non-introgression windows. This was done as often the "non-ingtrogression" windows had values which were just above the 30 variations cutoff. The threshold can be adjusted in the formula ("threshold"). 
+
+assign_blocks <-function(df, threshold){
+  df$block_no <- NA
+  block_no = 1
+
+  for (i in seq(1, nrow(df))){
+    if(df[i, "monoccoccum_min"] > threshold){
+      df[i, "block_no"] <- NA}
+
+  else if (df[i, "monoccoccum_min"] <= threshold){
+    df[i, "block_no"] <- block_no
+      if (i > (nrow(df)-9)){}
+
+  else if (
+        (df[i+1, "monoccoccum_min"] > threshold) &
+        (df[i+2, "monoccoccum_min"] > threshold) & 
+        (df[i+3, "monoccoccum_min"] > threshold) &
+        (df[i+4, "monoccoccum_min"] > threshold) &
+        (df[i+5, "monoccoccum_min"] > threshold) & 
+        (df[i+6, "monoccoccum_min"] > threshold) &
+        (df[i+7, "monoccoccum_min"] > threshold) &
+        (df[i+8, "monoccoccum_min"] > threshold) &
+        (df[i+9, "monoccoccum_min"] > threshold) 
+        ){
+        block_no <- block_no + 1
+      }
+    }
+  }
+  return(df)
+}
+
+# Run formula with 30 threshold value. This adds an extra column to the original binded file "block_no" which indicates the block number of the introgression based on the criteria. 
+
+stanley_30_blocks <- assign_blocks(stanley_all, 30)
+head(stanley_30_blocks)
+
+```
+
+
+
+```{r fig.width=15, fig.height=20, echo=FALSE, warning = FALSE,}
+
+# Filter file based on windows with variations <=30
+stanley_30 <- stanley_30_blocks %>% filter(monoccoccum_min <=30) 
+
+# Output file with the chromosome, start and end, and length of the introgression blocks as defined by the formula above.  
+stanley_30$start <- as.numeric(stanley_30$start)
+stanley_30 %>% group_by(block_no, seqname) %>% summarise(Start = min(start), End = (max(start)+ 50000)) %>% mutate(Length = End-Start) %>% arrange(block_no) %>% write.csv(file = "W:\\quirozj\\09_watseq\\15_alignments_to_ibspy\\variations_tables\\final_analysis\\stanley_blocks_monococcum_30_all.csv", row.names = TRUE, col.names = TRUE) 
+
+# Output file with the number of 50-kbp windows per block
+stanley_30 %>% group_by(block_no) %>% summarise(Start = min(start), End = (max(start)+ 50000)) %>% mutate(windows = (End-Start)/50000) %>% select(c(1,4)) %>% arrange(block_no) %>% write.csv(file = "W:\\quirozj\\09_watseq\\15_alignments_to_ibspy\\variations_tables\\final_analysis\\windows_per_block_stanley.csv", row.names = TRUE, col.names = TRUE) 
+
+
+# Move "block_no" column to the start and then pivot longer to make a long file
+stanley_30$start <- as.factor(stanley_30$start)
+stanley_30_long <- stanley_30 %>% relocate(block_no, .after=monoccoccum_min) %>%  pivot_longer(cols = c(6:248), names_to = 'genotype', values_to = 'variations')  
+
+
+# Read in two previous files and also the "mono_clade.csv" file which has the assignment of the monococcum accessions to each clade based on the STRUCTURE and phylogeny analysis. 
+mono_clade  <- read.table(file = "W:\\quirozj\\09_watseq\\15_alignments_to_ibspy\\variations_tables\\final_analysis\\mono_clade.csv", header = TRUE, sep = ",", stringsAsFactors = FALSE)
+windows  <- read.table(file = "W:\\quirozj\\09_watseq\\15_alignments_to_ibspy\\variations_tables\\final_analysis\\windows_per_block_stanley.csv", header = TRUE, sep = ",", stringsAsFactors = FALSE)
+blocks  <- read.table(file = "W:\\quirozj\\09_watseq\\15_alignments_to_ibspy\\variations_tables\\final_analysis\\stanley_blocks_monococcum_30_all.csv", header = TRUE, sep = ",", stringsAsFactors = FALSE)
+
+ 
+# Join tables to include the clade of each genotype and the number of windows per each introgression block
+stanley_30_long <- dplyr::left_join(stanley_30_long, mono_clade, by ="genotype")
+stanley_30_long <- dplyr::left_join(stanley_30_long, windows, by ="block_no")
+head(stanley_30_long)
+
+
+# Output file with the number of T. monococcum accessions belonging to each of the different STRUCTURE groups and clades. An accession is assigned as having the introgression if it has at least 20% of the 50-kbp windows with variations values of 30 or less. For example, if an introgression block has 60 windows, then an accession would be classified as having the introgression if 12 or more 50-kbp windows (60*20% = 12 windows) had variation values of 30 or less.  
+stanley_30_long %>% select(c(1:2,5:9,11)) %>% filter(variations <=30) %>% group_by(block_no, genotype, clade, windows) %>% summarise(n = n()) %>% arrange(desc(n)) %>% arrange(block_no) %>% mutate(perc = (n/windows)*100) %>% filter(perc >=20) %>% group_by(block_no, clade) %>%  summarise(n1 = n()) %>% pivot_wider(names_from = clade, values_from = n1) %>% mutate_all(., ~replace_na(.,0)) %>% write.csv(file = "W:\\quirozj\\09_watseq\\15_alignments_to_ibspy\\variations_tables\\final_analysis\\stanley_clades.csv", row.names = TRUE, col.names = TRUE)
+
+# Output file with the percentage of the 50-kbp windows with variations <=30 within an introgression block, for each of the hexaploid wheat pangenome cultivars. Note that values less than 20% were filtered and annotated as 0.    
+stanley_30_long %>% select(c(1:2,5:9,11)) %>% filter(variations <=30) %>% filter(clade == "pangenome") %>%group_by(block_no, genotype, clade, windows) %>% summarise(n = n()) %>% arrange(desc(n)) %>% arrange(block_no) %>% mutate(perc = (n/windows)*100) %>% filter(perc >=20) %>% select(c(1:2,6)) %>%  pivot_wider(names_from = genotype, values_from = perc) %>% mutate_all(., ~replace_na(.,0)) %>%  dplyr::mutate_if(is.numeric, round, 1)%>% write.csv(file = "W:\\quirozj\\09_watseq\\15_alignments_to_ibspy\\variations_tables\\final_analysis\\stanley_introgressions_in_pangenomes.csv", row.names = TRUE, col.names = TRUE)
+
+#Read in the previous output files and join into one table 
+intro_clades  <- read.table(file = "W:\\quirozj\\09_watseq\\15_alignments_to_ibspy\\variations_tables\\final_analysis\\stanley_clades.csv", header = TRUE, sep = ",", stringsAsFactors = FALSE)
+intro_pangenomes  <- read.table(file = "W:\\quirozj\\09_watseq\\15_alignments_to_ibspy\\variations_tables\\final_analysis\\stanley_introgressions_in_pangenomes.csv", header = TRUE, sep = ",", stringsAsFactors = FALSE)
+stanley_final_introgressionv1 <- dplyr::left_join(blocks, windows, by = "block_no")
+stanley_final_introgression <- dplyr::left_join(stanley_final_introgressionv1, intro_clades, by = "block_no")
+stanley_final_introgression_pangenomes <- dplyr::left_join(stanley_final_introgression, intro_pangenomes, by = "block_no")
+head(stanley_final_introgression_pangenomes)
+
+# Output file as above, but for the assignment of dom_g1 accessions to each of the seven clades
+stanley_30_long %>% select(c(1:2,5:10,11)) %>% filter(variations <=30) %>% group_by(block_no, genotype, group, windows) %>% summarise(n = n()) %>% arrange(desc(n)) %>% arrange(block_no) %>% mutate(perc = (n/windows)*100) %>% filter(perc >=20) %>% filter(grepl('clade', group)) %>% group_by(block_no, group) %>%  summarise(n1 = n()) %>% pivot_wider(names_from = group, values_from = n1) %>% mutate_all(., ~replace_na(.,0)) %>% select(order(colnames(., ))) %>%  write.csv(file = "W:\\quirozj\\09_watseq\\15_alignments_to_ibspy\\variations_tables\\final_analysis\\stanley_mono_groups.csv", row.names = TRUE, col.names = TRUE)
+
+# Final output file with the introgression block, start-end, length, window number and assignment of accession to the different groups, clades (for dom_g1 accessions), and the % of windows with variations <=30 in the pangenome cultivars (filtered for >20%)
+mono_groups  <- read.table(file = "W:\\quirozj\\09_watseq\\15_alignments_to_ibspy\\variations_tables\\final_analysis\\stanley_mono_groups.csv", header = TRUE, sep = ",", stringsAsFactors = FALSE)
+dplyr::left_join(stanley_final_introgression_pangenomes, mono_groups, by = "block_no") %>% select(., block_no, seqname, Start, End, Length, windows, mono_green, mono_blue, beta_green, beta_gray, beta_red, gamma_red, alpha_Purple, alpha_Yellow, clade_.1, clade_.2, clade_.3,clade_.4, clade_.5, clade_.6, clade_.7, arina.pg, chinese.pg, jagger.pg, julius.pg, lancer.pg, landmark.pg, mace.pg, mattis.pg, stanley.pg) %>% mutate_all(., ~replace_na(.,0)) %>% write.csv(file = "W:\\quirozj\\09_watseq\\15_alignments_to_ibspy\\variations_tables\\final_analysis\\Introgressions_Final\\stanley_monoccocum_introgressions.csv", row.names = TRUE, col.names = TRUE)
+
+# Output file of the T. monococcum accessions assigned to each of the introgression blocks and the number and percentage of 50-kbp windows with variations <=30.
+stanley_30_long %>% select(c(1:2,5:10,11))%>% filter(variations <=30) %>% group_by(block_no, genotype, clade, group, windows) %>% summarise(n = n()) %>% arrange(desc(n)) %>% arrange(block_no) %>% mutate(perc = (n/windows)*100) %>% filter(perc >=20) %>% filter(clade %in% c("beta_red", "gamma_red", "alpha_Yellow","alpha_Purple","mono_blue","mono_green","beta_gray","beta_green")) %>% group_by(block_no, group) %>%  write.csv(file = "W:\\quirozj\\09_watseq\\15_alignments_to_ibspy\\variations_tables\\final_analysis\\mono_accessions\\stanley_mono_accessions.csv", row.names = TRUE, col.names = TRUE)
+
+
+```
