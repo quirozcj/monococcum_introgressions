@@ -1,0 +1,249 @@
+---
+title: "IBSpy variations vs Sequence ID comparison"
+author: "Cristobal Uauy"
+date: '2022-07-07'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(ggplot2)
+library(dplyr) 
+library(tidyverse)
+
+# Input all data from pairwise comparisons between hexaploid wheat cultivars. These files include reference chromosome, start and end of 500-kbp window, average percentage sequence identity of alignments (aln_perc_id), coverage percentage (coverage_pc), the query cultivar and the IBSpy variations for 50 kbp. 
+
+setwd("W:\\quirozj\\09_watseq\\15_alignments_to_ibspy\\aln_ibs_combined\\500000")
+
+rawAri_CS  <- read.table(file = "arinaLrFor_vs_chinese_vs_chinese-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawAri_Jag <- read.table(file = "arinaLrFor_vs_jagger_vs_jagger-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawAri_Jul <- read.table(file = "arinaLrFor_vs_julius_vs_julius-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawAri_Lan <- read.table(file = "arinaLrFor_vs_lancer_vs_lancer-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawAri_Ldm <- read.table(file = "arinaLrFor_vs_landmark_vs_landmark-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawAri_Mac <- read.table(file = "arinaLrFor_vs_mace_vs_mace-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawAri_Nor <- read.table(file = "arinaLrFor_vs_norin61_vs_norin61-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawAri_Sta <- read.table(file = "arinaLrFor_vs_stanley_vs_stanley-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawAri_Mat <- read.table(file = "arinaLrFor_vs_symattis_vs_mattis-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+rawCS_Ari  <- read.table(file = "chinesespring_vs_arinalrfor_vs_arina-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawCS_Jag <- read.table(file = "chinesespring_vs_jagger_vs_jagger-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawCS_Jul <- read.table(file = "chinesespring_vs_julius_vs_julius-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawCS_Lan <- read.table(file = "chinesespring_vs_lancer_vs_lancer-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawCS_Ldm <- read.table(file = "chinesespring_vs_landmark_vs_landmark-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawCS_Mac <- read.table(file = "chinesespring_vs_mace_vs_mace-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawCS_Nor <- read.table(file = "chinesespring_vs_norin61_vs_norin61-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawCS_Sta <- read.table(file = "chinesespring_vs_stanley_vs_stanley-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawCS_Mat <- read.table(file = "chinesespring_vs_symattis_vs_mattis-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+rawJag_Ari  <- read.table(file = "jagger_vs_arinalrfor_vs_arina-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawJag_CS <- read.table(file = "jagger_vs_chinese_vs_chinese-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawJag_Jul <- read.table(file = "jagger_vs_julius_vs_julius-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawJag_Lan <- read.table(file = "jagger_vs_lancer_vs_lancer-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawJag_Ldm <- read.table(file = "jagger_vs_landmark_vs_landmark-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawJag_Mac <- read.table(file = "jagger_vs_mace_vs_mace-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawJag_Nor <- read.table(file = "jagger_vs_norin61_vs_norin61-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawJag_Sta <- read.table(file = "jagger_vs_stanley_vs_stanley-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawJag_Mat <- read.table(file = "jagger_vs_symattis_vs_mattis-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+rawJul_Ari  <- read.table(file = "julius_vs_arinalrfor_vs_arina-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawJul_CS <- read.table(file = "julius_vs_chinese_vs_chinese-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawJul_Jag <- read.table(file = "julius_vs_jagger_vs_jagger-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawJul_Lan <- read.table(file = "julius_vs_lancer_vs_lancer-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawJul_Ldm <- read.table(file = "julius_vs_landmark_vs_landmark-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawJul_Mac <- read.table(file = "julius_vs_mace_vs_mace-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawJul_Nor <- read.table(file = "julius_vs_norin61_vs_norin61-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawJul_Sta <- read.table(file = "julius_vs_stanley_vs_stanley-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawJul_Mat <- read.table(file = "julius_vs_symattis_vs_mattis-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+rawLan_Ari  <- read.table(file = "lancer_vs_arinalrfor_vs_arina-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawLan_CS <- read.table(file = "lancer_vs_chinese_vs_chinese-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawLan_Jag <- read.table(file = "lancer_vs_jagger_vs_jagger-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawLan_Jul <- read.table(file = "lancer_vs_julius_vs_julius-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawLan_Ldm <- read.table(file = "lancer_vs_landmark_vs_landmark-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawLan_Mac <- read.table(file = "lancer_vs_mace_vs_mace-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawLan_Nor <- read.table(file = "lancer_vs_norin61_vs_norin61-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawLan_Sta <- read.table(file = "lancer_vs_stanley_vs_stanley-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawLan_Mat <- read.table(file = "lancer_vs_symattis_vs_mattis-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+rawLdm_Ari  <- read.table(file = "landmark_vs_arinalrfor_vs_arina-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawLdm_CS <- read.table(file = "landmark_vs_chinese_vs_chinese-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawLdm_Jag <- read.table(file = "landmark_vs_jagger_vs_jagger-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawLdm_Jul <- read.table(file = "landmark_vs_julius_vs_julius-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawLdm_Lan <- read.table(file = "landmark_vs_lancer_vs_lancer-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawLdm_Mac <- read.table(file = "landmark_vs_mace_vs_mace-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawLdm_Nor <- read.table(file = "landmark_vs_norin61_vs_norin61-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawLdm_Sta <- read.table(file = "landmark_vs_stanley_vs_stanley-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawLdm_Mat <- read.table(file = "landmark_vs_symattis_vs_mattis-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+rawMac_Ari  <- read.table(file = "mace_vs_arinalrfor_vs_arina-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawMac_CS <- read.table(file = "mace_vs_chinese_vs_chinese-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawMac_Jag <- read.table(file = "mace_vs_jagger_vs_jagger-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawMac_Jul <- read.table(file = "mace_vs_julius_vs_julius-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawMac_Lan <- read.table(file = "mace_vs_lancer_vs_lancer-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawMac_Ldm <- read.table(file = "mace_vs_landmark_vs_landmark-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawMac_Nor <- read.table(file = "mace_vs_norin61_vs_norin61-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawMac_Sta <- read.table(file = "mace_vs_stanley_vs_stanley-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawMac_Mat <- read.table(file = "mace_vs_symattis_vs_mattis-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+rawNor_Ari  <- read.table(file = "norin61_vs_arinalrfor_vs_arina-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawNor_CS <- read.table(file = "norin61_vs_chinese_vs_chinese-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawNor_Jag <- read.table(file = "norin61_vs_jagger_vs_jagger-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawNor_Jul <- read.table(file = "norin61_vs_julius_vs_julius-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawNor_Lan <- read.table(file = "norin61_vs_lancer_vs_lancer-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawNor_Ldm <- read.table(file = "norin61_vs_landmark_vs_landmark-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawNor_Mac <- read.table(file = "norin61_vs_mace_vs_mace-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawNor_Sta <- read.table(file = "norin61_vs_stanley_vs_stanley-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawNor_Mat <- read.table(file = "norin61_vs_symattis_vs_mattis-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+rawSta_Ari  <- read.table(file = "stanley_vs_arinalrfor_vs_arina-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawSta_CS <- read.table(file = "stanley_vs_chinese_vs_chinese-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawSta_Jag <- read.table(file = "stanley_vs_jagger_vs_jagger-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawSta_Jul <- read.table(file = "stanley_vs_julius_vs_julius-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawSta_Lan <- read.table(file = "stanley_vs_lancer_vs_lancer-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawSta_Ldm <- read.table(file = "stanley_vs_landmark_vs_landmark-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawSta_Mac <- read.table(file = "stanley_vs_mace_vs_mace-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawSta_Nor <- read.table(file = "stanley_vs_norin61_vs_norin61-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawSta_Mat <- read.table(file = "stanley_vs_symattis_vs_mattis-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+rawSym_Ari  <- read.table(file = "symattis_vs_arinalrfor_vs_arina-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawSym_CS <- read.table(file = "symattis_vs_chinese_vs_chinese-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawSym_Jag <- read.table(file = "symattis_vs_jagger_vs_jagger-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawSym_Jul <- read.table(file = "symattis_vs_julius_vs_julius-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawSym_Lan <- read.table(file = "symattis_vs_lancer_vs_lancer-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawSym_Ldm <- read.table(file = "symattis_vs_landmark_vs_landmark-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawSym_Mac <- read.table(file = "symattis_vs_mace_vs_mace-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawSym_Nor <- read.table(file = "symattis_vs_norin61_vs_norin61-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawSym_Sta <- read.table(file = "symattis_vs_stanley_vs_stanley-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+
+allHexaploid = rbind(rawAri_CS,	rawAri_Jag,	rawAri_Jul,	rawAri_Lan,	rawAri_Ldm,	rawAri_Mac,	rawAri_Nor,	rawAri_Sta,	rawAri_Mat,		rawCS_Ari,	rawCS_Jag,	rawCS_Jul,	rawCS_Lan,	rawCS_Ldm,	rawCS_Mac,	rawCS_Nor,	rawCS_Sta,	rawCS_Mat,		rawJag_Ari,	rawJag_CS,	rawJag_Jul,	rawJag_Lan,	rawJag_Ldm,	rawJag_Mac,	rawJag_Nor,	rawJag_Sta,	rawJag_Mat,		rawJul_Ari,	rawJul_CS,	rawJul_Jag,	rawJul_Lan,	rawJul_Ldm,	rawJul_Mac,	rawJul_Nor,	rawJul_Sta,	rawJul_Mat,		rawLan_Ari,	rawLan_CS,	rawLan_Jag,	rawLan_Jul,	rawLan_Ldm,	rawLan_Mac,	rawLan_Nor,	rawLan_Sta,	rawLan_Mat,		rawLdm_Ari,	rawLdm_CS,	rawLdm_Jag,	rawLdm_Jul,	rawLdm_Lan,	rawLdm_Mac,	rawLdm_Nor,	rawLdm_Sta,	rawLdm_Mat,		rawMac_Ari,	rawMac_CS,	rawMac_Jag,	rawMac_Jul,	rawMac_Lan,	rawMac_Ldm,	rawMac_Nor,	rawMac_Sta,	rawMac_Mat,		rawNor_Ari,	rawNor_CS,	rawNor_Jag,	rawNor_Jul,	rawNor_Lan,	rawNor_Ldm,	rawNor_Mac,	rawNor_Sta,	rawNor_Mat,		rawSta_Ari,	rawSta_CS,	rawSta_Jag,	rawSta_Jul,	rawSta_Lan,	rawSta_Ldm,	rawSta_Mac,	rawSta_Nor,	rawSta_Mat,		rawSym_Ari,	rawSym_CS,	rawSym_Jag,	rawSym_Jul,	rawSym_Lan,	rawSym_Ldm,	rawSym_Mac,	rawSym_Nor,	rawSym_Sta)
+
+head(allHexaploid)
+tail(allHexaploid)
+
+allHexaploid$chr <- as.factor(allHexaploid$chr)
+allHexaploid$start <- as.factor(allHexaploid$start)
+allHexaploid$end <- as.factor(allHexaploid$end)
+allHexaploid$aln_perc_id <- as.numeric(allHexaploid$aln_perc_id)
+allHexaploid$aln_length <- as.numeric(allHexaploid$aln_length)
+allHexaploid$coverage_prc <- as.numeric(allHexaploid$coverage_prc)
+options(pillar.sigfig = 6)
+
+allHexaploid %>% count()
+
+```
+
+```{r fig.width=15, fig.height=5, echo=FALSE, warning = FALSE,}
+
+# Examine distribution of all data based on the percentage alignment and the IBSpy variations.
+allHexaploid %>% mutate(bin = cut_width(coverage_prc, width=0.1, boundary=0)) %>% group_by(bin) %>% summarise_at(vars(aln_perc_id),funs(n(), mean, median, sd)) %>% write.csv(file = "Bins_percent_ID_ALL_hexaploid.csv", row.names = TRUE, col.names = TRUE)
+allHexaploid %>% mutate(bin = cut_width(coverage_prc, width=0.1, boundary=0)) %>% group_by(bin) %>% summarise_at(vars(X50kb_variations),funs(n(), mean, median, sd)) %>% write.csv(file = "Bins_Variations_ALL_hexaploid.csv",row.names = TRUE, col.names = TRUE)
+
+
+# Plot the distribution of the percentage identity (aln_perc_id) based on bins organised by 10 variations per 50 kb (x50kb_variations). First with no filter of breadth and then using filter of at least 60% coverage
+allHexaploid %>% filter(aln_perc_id > 0) %>% filter(X50kb_variations <250) %>% mutate(bin = cut_width(X50kb_variations, width=10, boundary=0)) %>% ggplot(aes(x=bin, y = aln_perc_id)) + geom_jitter(width = 0.3, size=0.4, alpha=0.9) + geom_boxplot(outlier.shape = NA, alpha=0.6) + ylim(97.5, 100) + xlab("X50kb_variations (All)")
+allHexaploid %>% filter(aln_perc_id > 0) %>% filter(coverage_prc > 0.6) %>% filter(X50kb_variations <250) %>% mutate(bin = cut_width(X50kb_variations, width=10, boundary=0)) %>% ggplot(aes(x=bin, y = aln_perc_id)) + geom_jitter(width = 0.3, size=0.4, alpha=0.9) + geom_boxplot(outlier.shape = NA, alpha=0.6) + ylim(97.5, 100) + xlab("X50kb_variations (coverage_prc > 0.6)")
+
+
+# Output summary data from the bins using no filtering or 60% breadth filter.
+allHexaploid %>% filter(aln_perc_id > 0) %>% mutate(bin = cut_width(X50kb_variations, width=10, boundary=0)) %>% group_by(bin) %>% summarise_at(vars(aln_perc_id),funs(n(), mean, median, sd)) %>% write.csv(file = "IBSpy bins vs alignment_all_hexaploid.csv", row.names = TRUE, col.names = TRUE)
+allHexaploid %>% filter(aln_perc_id > 0) %>% filter(coverage_prc > 0.6) %>% mutate(bin = cut_width(X50kb_variations, width=10, boundary=0)) %>% group_by(bin) %>% summarise_at(vars(aln_perc_id),funs(n(), mean, median, sd)) %>% write.csv(file = "IBSpy bins vs alignment_all_hexaploid_60pc_breadth.csv", row.names = TRUE, col.names = TRUE)
+
+```
+
+```{r fig.width=15, fig.height=5, echo=FALSE, warning = FALSE,}
+
+# Calculate the percentage of data above 99.8 and 99.9% sequence ID based on the <=30 IBSpy cutoff and the minimum of >60% breadth of coverage.
+
+percent1 <- allHexaploid  %>% filter(aln_perc_id > 0) %>% filter(coverage_prc > 0.6)  %>% filter(X50kb_variations <= 30) 
+percent <- percent1$aln_perc_id 
+quantile(percent, probs = seq(.01, 1, by = .01))
+ecdf(percent)(99.8)
+ecdf(percent)(99.9)
+
+```
+
+## Analysis of monococcum + urartu
+
+```{r fig.width=15, fig.height=5, echo=FALSE, warning = FALSE,}
+setwd("W:\\quirozj\\09_watseq\\15_alignments_to_ibspy\\aln_ibs_combined\\500000")
+
+# Upload all the hexaploid wheat pangenome comparisons to the two T. monococcum assemblies
+
+rawAri_TA299  <- read.table(file = "arinaLrFor_vs_TA299_vs_TA299-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+rawAri_TA10622 <- read.table(file = "arinaLrFor_vs_TA10622_vs_TA10622-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+raw_Chi_TA299  <- read.table(file = "chinesespring_vs_TA299_vs_TA299-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+raw_Chi_TA10622 <- read.table(file = "chinesespring_vs_TA10622_vs_TA10622-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+raw_Jag_TA299  <- read.table(file = "jagger_vs_TA299_vs_TA299-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+raw_Jag_TA10622 <- read.table(file = "jagger_vs_TA10622_vs_TA10622-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+raw_Jul_TA299  <- read.table(file = "julius_vs_TA299_vs_TA299-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+raw_Jul_TA10622 <- read.table(file = "julius_vs_TA10622_vs_TA10622-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+raw_Lan_TA299  <- read.table(file = "lancer_vs_TA299_vs_TA299-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+raw_Lan_TA10622 <- read.table(file = "lancer_vs_TA10622_vs_TA10622-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+raw_Ldm_TA299  <- read.table(file = "landmark_vs_TA299_vs_TA299-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+raw_Ldm_TA10622 <- read.table(file = "landmark_vs_TA10622_vs_TA10622-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+raw_Mac_TA299  <- read.table(file = "mace_vs_TA299_vs_TA299-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+raw_Mac_TA10622 <- read.table(file = "mace_vs_TA10622_vs_TA10622-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+raw_Nor_TA299  <- read.table(file = "norin61_vs_TA299_vs_TA299-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+raw_Nor_TA10622 <- read.table(file = "norin61_vs_TA10622_vs_TA10622-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+raw_Sta_TA299  <- read.table(file = "stanley_vs_TA299_vs_TA299-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+raw_Sta_TA10622 <- read.table(file = "stanley_vs_TA10622_vs_TA10622-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+raw_Sym_TA299  <- read.table(file = "symattis_vs_TA299_vs_TA299-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+raw_Sym_TA10622 <- read.table(file = "symattis_vs_TA10622_vs_TA10622-pg_500000_aln_to_ibspy.tsv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+
+
+all_mono = rbind(raw_Chi_TA10622,	raw_Chi_TA299,	raw_Jag_TA10622,	raw_Jag_TA299,	raw_Jul_TA10622,	raw_Jul_TA299,	raw_Lan_TA10622,	raw_Lan_TA299,	raw_Ldm_TA10622,	raw_Ldm_TA299,	raw_Mac_TA10622,	raw_Mac_TA299, raw_Nor_TA10622,	raw_Nor_TA299,	raw_Sta_TA10622,	raw_Sta_TA299,	raw_Sym_TA10622,	raw_Sym_TA299,	rawAri_TA10622,	rawAri_TA299)
+
+head(all_mono)
+tail(all_mono)
+
+all_mono$chr <- as.factor(all_mono$chr)
+all_mono$start <- as.factor(all_mono$start)
+all_mono$end <- as.factor(all_mono$end)
+all_mono$aln_perc_id <- as.numeric(all_mono$aln_perc_id)
+all_mono$aln_length <- as.numeric(all_mono$aln_length)
+all_mono$coverage_prc <- as.numeric(all_mono$coverage_prc)
+options(pillar.sigfig = 6)
+```
+
+
+```{r fig.width=15, fig.height=5, echo=FALSE, warning = FALSE,}
+
+#Distribution of all data
+all_mono %>% mutate(bin = cut_width(coverage_prc, width=0.1, boundary=0)) %>% group_by(bin) %>% summarise_at(vars(aln_perc_id),funs(n(), mean, median, sd)) %>% write.csv(file = "Bins_percent_ID_ALL_Agenome.csv", row.names = TRUE, col.names = TRUE)
+all_mono %>% mutate(bin = cut_width(coverage_prc, width=0.1, boundary=0)) %>% group_by(bin) %>% summarise_at(vars(X50kb_variations),funs(n(), mean, median, sd)) %>% write.csv(file = "Bins_Variations_ALL_Agenome.csv",row.names = TRUE, col.names = TRUE)
+
+all_mono %>% filter(aln_perc_id > 0) %>% filter(X50kb_variations <250) %>% mutate(bin = cut_width(X50kb_variations, width=10, boundary=0)) %>%  ggplot(aes(x=bin, y = aln_perc_id)) + geom_jitter(width = 0.3, size=0.4, alpha=0.9) + geom_boxplot(outlier.shape = NA, alpha=0.6) + ylim(97.5, 100) + xlab("X50kb_variations (All)")
+all_mono %>% filter(aln_perc_id > 0) %>% filter(coverage_prc > 0.6) %>% filter(X50kb_variations <250) %>% mutate(bin = cut_width(X50kb_variations, width=10, boundary=0)) %>%  ggplot(aes(x=bin, y = aln_perc_id)) + geom_jitter(width = 0.3, size=0.4, alpha=0.9) + geom_boxplot(outlier.shape = NA, alpha=0.6) + ylim(97.5, 100) + xlab("X50kb_variations (coverage_prc > 0.6)")
+
+
+all_mono %>% filter(aln_perc_id > 0) %>% mutate(bin = cut_width(X50kb_variations, width=10, boundary=0)) %>% group_by(bin) %>% summarise_at(vars(aln_perc_id),funs(n(), mean, median, sd)) %>% write.csv(file = "IBSpy bins vs alignment_all_Agenome.csv", row.names = TRUE, col.names = TRUE)
+all_mono %>% filter(aln_perc_id > 0) %>% filter(coverage_prc > 0.6) %>% mutate(bin = cut_width(X50kb_variations, width=10, boundary=0)) %>% group_by(bin) %>% summarise_at(vars(aln_perc_id),funs(n(), mean, median, sd)) %>% write.csv(file = "IBSpy bins vs alignment_all_Agenome_60pc_breadth.csv", row.names = TRUE, col.names = TRUE)
+
+```
+
+```{r fig.width=15, fig.height=5, echo=FALSE, warning = FALSE,}
+
+# Calculate the percentage of data above 99.8 and 99.9% sequence ID based on the <=30  IBSpy cutoff and the minimum of >60% breadth of coverage.
+
+percent1 <- all_mono  %>% filter(aln_perc_id > 0) %>% filter(coverage_prc > 0.6)  %>% filter(X50kb_variations <= 30) 
+percent <- percent1$aln_perc_id 
+quantile(percent, probs = seq(.01, 1, by = .01))
+ecdf(percent)(99.8)
+ecdf(percent)(99.9)
+
+
+```
+
+
+
