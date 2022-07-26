@@ -1,4 +1,64 @@
-# Analysis to detect Triticum monococcum introgressions in domesticated hexaploid wheat.
+```
+Author: Hanin Ahmed
+Date: 26/07/2021
+```
+# k-mer mapping based approach to detect introgressed region
+
+Input data used: whole-genome sequencing data from all domesticated einkorn accessions (61 T. monococcum accessions) and 30 T. urartu accessions from Zhou et al. (2020) https://www.nature.com/articles/s41588-020-00722-w: 
+
+
+1)	Count k-mer from each accession using jellyfish (https://github.com/gmarcais/Jellyfish)
+We are using k-mer length of 51
+```sh
+# Command line:
+zcat accession.fq.gz | jellyfish count -C -m 51 -s 3G -t 32  -o accession_51mer_count.jf /dev/fd/0
+```
+
+2)	Obtain k-mers sequences
+```sh
+# Command line: 
+jellyfish dump -L 2 -ct accession_51mer_count.jf > accession.dump.txt
+```
+
+3)	Concatenate all k-mers from all accessions per species (all domesticated einkorn, and all T. urartu, separately) and keep one representative of each k-mer
+```sh
+# Example command line: 
+xargs awk '{print $1}' < list_accession_monococcum.txt | awk '!seen[$0]++' > all_kmers_moonococcum.txt
+```
+
+4)	Obtain unique T. monococcum k-mers (i.e., k-mers present only on T. monococcum and not T. urartu)  – This step is repeated to obtain unique T. urartu k-mers
+```sh
+# Example command line: 
+awk 'NR==FNR{a[$0];next}!($0 in a)' all_kmers_urartu.txt all_kmers_monococcum.txt > kmers_monococcum_uniq.txt
+```
+The idea of obtaining unique k-mers is to exclude regions that are similar to T. urartu (the A-genome donor) 
+
+5)	Create fasta file from the list of k-mers
+```sh
+# Example command line to create fasta file for T. monococcum:
+awk 'BEGIN{cont=0}{printf ">mer_%d\n",cont; print $0;cont++}' kmers_monococcum_uniq.txt > kmers_monococcum_uniq.fa
+```
+
+6)	Mapping k-mers to the bread wheat reference assembly
+```sh
+# Example command line:
+bwa mem -t 16 -k 51 -T 51 -M ArinaLrFor_subgenomeA.fasta kmers_monococcum_uniq.fa | samtools view -bSh - | samtools sort -o kmer_monococcum_uniq_againstRef_ArinaLrFor.bam 
+```
+Note: Only the A-subgenome was used as a reference
+The same step will be repeated but mapping T. urartu k-mers to the bread wheat genome assembly
+
+7)	Analyze the depth of mapped k-mers in a 1 Mb non-overlapping genomic window for each species (we will be looking at introgressed segments with a mega-base resolution)
+For this, we used mosdepth (https://github.com/brentp/mosdepth)
+```sh
+# Example command line:
+mosdepth -t 16 --by ArinaLrFor_1mb.bed ./kmer_monococcum_againstRef_ArinaLrFor_depth_1Mb kmer_monococcum_uniq_againstRef_ArinaLrFor.bam
+```
+ArinaLrFor_1mb.bed is a tab-delimited text file that defines the start and end of each genomic window.
+Example:
+chr1A	1	1000000
+
+
+# IBSpy: Analysis to detect Triticum monococcum introgressions in domesticated hexaploid wheat.
 
 Scripts used in the publication " Title of the publication " 
 
@@ -26,7 +86,7 @@ kmc -k31 -ci1 -m30 -t5 -fq <(ls -d $in_dir/*.gz) accesion_id out_dir
 ```
 
 2. Detect variations.
-We employed IBSpy (IBSpy-0.3.1) to quantify variaitons per 50kb windows.
+We employed IBSpy (IBSpy-0.3.1) to quantify variaitons per 50-kbp windows.
 	* ``` script: run_IBSpy.sh ```\
 For details about how IBSpy detects variaitons, please, read the documentation [here](https://github.com/Uauy-Lab/IBSpy)
 
@@ -38,14 +98,14 @@ IBSpy --kmer_size 31 --window_size 50000 --reference reference1.fa --database ac
 
 3. Combine IBSpy output tables by window & reference.\
 	* ```script: run_combine.sh```\
-	This is to proccess a single table in downstream analysis. The script requres a metadata file with the name of the individual IBSpy output files with their corresponding names. See the ```metadata.tsv``` example. All the  indiviual files will be combined by reference and arbitrary windows size.
+	This is to proccess a single table in downstream analysis. The script requres a metadata file with the name of the individual IBSpy output files with their corresponding names. See the ```metadata.tsv``` example. All the  indiviual files will be combined by reference at arbitrary windows size.
 
 ```sh
 #example
-python3 combine_by_windows.py -i metadata.tsv -r reference_name -w 50000 -s variaitons -o reference_combined_queries_50000.tsv.gz
+python3 combine_by_windows.py -i metadata.tsv -r reference_name -w 50000 -s variations -o reference_combined_queries_50000.tsv.gz
 ```
 
-The list below of the variations tables combined by chrosmosome & reference are public available ``` here(link)```
+The list below correspond to the variations tables combined by chrosmosome & reference which are public available ``` here(link)```
 
 	- arinalrfor_combined_queries_50000w.tsv.gz
 	- chinese_combined_queries_50000w.tsv.gz
@@ -60,6 +120,5 @@ The list below of the variations tables combined by chrosmosome & reference are 
 	- sy_mattis_combined_queries_50000w.tsv.gz
 
 4. Define monococcum introgressions.\
-To proces downstream data and define introgressions we use python & R notebook scripts.
+To process downstream data and define introgressions we used a python & R notebook scripts.
 Please, see ``` monococcum_min_variations.ipynb ``` jupyther notebooks and R scripts for detailed description.
-
