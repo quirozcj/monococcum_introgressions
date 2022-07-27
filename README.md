@@ -7,21 +7,27 @@ In this analysis we used the 10 pangenome chromosome level assemblies from the p
 
 ## Our firts method involves a k-mer mapping based approach to detect introgressed regions
 ```
-Title: "*k-*mer mapping based approach to detect introgressed regions"
+Title: "k-mer mapping based approach to detect introgressed regions"
 Author: Hanin Ahmed
 Date: 26/07/2022
 ```
 Input data used: whole-genome sequencing data from all domesticated einkorn accessions (61 T. monococcum accessions) and 30 T. urartu accessions from Zhou et al. (2020) https://www.nature.com/articles/s41588-020-00722-w: 
 
 
-1)	Count *k-*mer from each accession using jellyfish (https://github.com/gmarcais/Jellyfish)
+1)	Count k-mer from each accession using jellyfish (https://github.com/gmarcais/Jellyfish)
 We used k-mer length of 51
 ```sh
 # Example command line:
-zcat accession.fq.gz | jellyfish count -C -m 51 -s 3G -t 32  -o accession_51mer_count.jf /dev/fd/0
+zcat accession.fq.gz | \
+jellyfish count \
+-C \
+-m 51 \
+-s 3G \
+-t 32 \
+-o accession_51mer_count.jf /dev/fd/0
 ```
 
-2)	Obtain *k-*mers sequences
+2)	Obtain k-mers sequences
 ```sh
 # Example command line: 
 jellyfish dump -L 2 -ct accession_51mer_count.jf > accession.dump.txt
