@@ -4,7 +4,7 @@
 Scripts used in the publication ***"Einkorn genomics sheds light on evolutionary history of the oldest domesticated wheat"***.
 
 ## We used two methods:
-## Our firts method involves a *k*-mer mapping based approach.
+### 1. Our firts method involves a *k*-mer mapping based approach.
 ```
 Author: Hanin Ahmed
 Date: 26/07/2022
@@ -86,7 +86,7 @@ Example:
 chr1A	1	1000000
 
 
-## In our second approach we employed IBSpy (Identity-by-State in python).
+### 2. In our second approach we employed IBSpy (Identity-by-State in python).
 ```
 Author: J. Quiroz-Chavez, R. Ramirez-Gonzalez, C. Uauy.
 Date: 26/07/2022
