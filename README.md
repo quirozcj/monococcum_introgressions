@@ -3,7 +3,7 @@
 
 Scripts used in the publication ***"Einkorn genomics sheds light on evolutionary history of the oldest domesticated wheat"***
 
-## Our firts method involves a *k-*mer mapping based approach to detect introgressed regions
+## Our firts method involves a _k_-mer mapping based approach to detect introgressed regions
 ```
 Author: Hanin Ahmed
 Date: 26/07/2022
