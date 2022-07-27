@@ -1,7 +1,7 @@
 
 # We used two methods to detect Introgressions from T. monococcum into domesticated wheat.
 
-Scripts used in the publication ***Einkorn genomics sheds light on evolutionary history of the oldest domesticated wheat***
+Scripts used in the publication ***"Einkorn genomics sheds light on evolutionary history of the oldest domesticated wheat"***
 
 ## Our firts method involves a k-mer mapping based approach to detect introgressed regions
 ```
@@ -70,9 +70,9 @@ samtools view \
 samtools sort \
 -o kmer_monococcum_uniq_againstRef_ArinaLrFor.bam 
 ```
-Note: Only the A-subgenome was used as a reference. The same steps will be repeated but mapping T. urartu k-mers to the bread wheat genome assembly
+Note: Only the A-subgenome was used as a reference. The same steps will be repeated, but mapping T. urartu k-mers to the bread wheat genome assembly
 
-7.	Analyze the depth of mapped k-mers in a 1 Mb non-overlapping genomic window for each species (we will be looking at introgressed segments with a mega-base resolution). For this, we used mosdepth (https://github.com/brentp/mosdepth).
+7.	Analyze the depth of mapped k-mers in a 1 Mb non-overlapping genomic window for each species (we will be looking at introgressed segments with a mega-base resolution). For this, we used ```mosdepth``` (https://github.com/brentp/mosdepth).
 
 ```sh
 # Example command line:
@@ -92,7 +92,7 @@ Date: 26/07/2022
 ```
 
 IBSpy is a k-mer based approach software which allows to detect introgressions at 50-kbp resolution. For details about how IBSpy detects variaitons, please, read the documentation [here](https://github.com/Uauy-Lab/IBSpy).\
-We used the 218 accesions of T. monococcum sequenced in this study as a query samples. On average all samples had ```~10-fold coverage```. We also included the the ten wheat genome assemblies (Walkowiak et al., 2020) and two chrosmosome-scale T. monococcum assemblies from this study. We included the assemblies, either as a reference or as query samples.
+We used the 218 accesions of *T. monococcum* sequenced in this study as a query samples. On average all samples had ```~10-fold coverage```. We also included the the ten wheat genome assemblies (Walkowiak et al., 2020) and two chrosmosome-scale T. monococcum assemblies from this study. We included the assemblies, either as a reference or as query samples.
 
 
 1. Build k-mer databases.\
