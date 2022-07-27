@@ -58,6 +58,12 @@ stanley_all  %>%  mutate(Introgression = ifelse(monoccoccum_min <=30, "Yes", "No
 
 # Function to loop across the file to assign contiguous introgression blocks. The criteria were (a) any 50-kbp window with variations <=30 is considered an introgression and (b) we linked introgression windows if they were separated by less than 10 non-introgression windows. This was done as often the "non-ingtrogression" windows had values which were just above the 30 variations cutoff. The threshold can be adjusted in the formula ("threshold"). 
 
+
+
+# Scripts to define and stitch introgresssion blocks adapted from:
+# https://jmonlong.github.io/Hippocamplus/2017/09/19/mummerplots-with-ggplot2/
+# https://github.com/Uauy-Lab/pangenome-haplotypes/blob/master/haplotype-block-assignment/assign_mummer_blocks_whole_genome.r
+
 assign_blocks <-function(df, threshold){
   df$block_no <- NA
   block_no = 1
