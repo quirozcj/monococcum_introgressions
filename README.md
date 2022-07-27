@@ -3,16 +3,16 @@
 
 Scripts used in the publication ***"Einkorn genomics sheds light on evolutionary history of the oldest domesticated wheat"***
 
-## Our firts method involves a k-mer mapping based approach to detect introgressed regions
+## Our firts method involves a *k-*mer mapping based approach to detect introgressed regions
 ```
 Author: Hanin Ahmed
 Date: 26/07/2022
 ```
-Input data used: whole-genome sequencing data from all domesticated einkorn accessions (61 *T. monococcum* accessions) and 30 *T. urartu* accessions from Zhou et al., (2020) https://www.nature.com/articles/s41588-020-00722-w: 
+Input data used: whole-genome sequencing data from all domesticated einkorn accessions (61 *T. monococcum* accessions) and 30 *T. urartu* accessions from Zhou et *al.,* (2020) https://www.nature.com/articles/s41588-020-00722-w: 
 
 
-1.	Count k-mers from each accession using ```jellyfish``` (https://github.com/gmarcais/Jellyfish).
-We used k-mer length of 51
+1.	Count *k-*mers from each accession using ```jellyfish``` (https://github.com/gmarcais/Jellyfish).
+We used *k-*mer length of 51
 
 ```sh
 # Example command line:
@@ -25,7 +25,7 @@ jellyfish count \
 -o accession_51mer_count.jf /dev/fd/0
 ```
 
-2.	Obtain k-mers sequences and remove unique.
+2.	Obtain *k-*mers sequences and remove unique.
 
 ```sh
 # Example command line: 
@@ -34,7 +34,7 @@ jellyfish dump \
 -ct accession_51mer_count.jf > accession.dump.txt
 ```
 
-3.	Concatenate all k-mers from all accessions per species (all domesticated einkorn, and all *T. urartu*, separately) and keep one representative of each k-mer
+3.	Concatenate all *k-*mers from all accessions per species (all domesticated einkorn, and all *T. urartu*, separately) and keep one representative of each *k-*mer
 
 ```sh
 # Example command line: 
@@ -42,22 +42,22 @@ xargs awk '{print $1}' < list_accession_monococcum.txt | \
 awk '!seen[$0]++' > all_kmers_moonococcum.txt
 ```
 
-4.	Obtain unique *T. monococcum* k-mers (i.e., k-mers present only on *T. monococcum* and not *T. urartu*)  – This step is repeated to obtain unique *T. urartu* k-mers
+4.	Obtain unique *T. monococcum* *k-*mers (i.e., *k-*mers present only on *T. monococcum* and not *T. urartu*)  – This step is repeated to obtain unique *T. urartu* *k-*mers
 
 ```sh
 # Example command line: 
 awk 'NR==FNR{a[$0];next}!($0 in a)' all_kmers_urartu.txt all_kmers_monococcum.txt > kmers_monococcum_uniq.txt
 ```
-The idea of obtaining unique k-mers is to exclude regions that are similar to *T. urartu* (the A-genome donor) 
+The idea of obtaining unique *k-*mers is to exclude regions that are similar to *T. urartu* (the A-genome donor) 
 
-5.	Create fasta file from the list of k-mers
+5.	Create fasta file from the list of *k-*mers
 
 ```sh
 # Example command line to create fasta file for *T. monococcum*:
 awk 'BEGIN{cont=0}{printf ">mer_%d\n",cont; print $0;cont++}' kmers_monococcum_uniq.txt > kmers_monococcum_uniq.fa
 ```
 
-6.	Mapping k-mers to the bread wheat reference assembly
+6.	Mapping *k-*mers to the bread wheat reference assembly
 ```sh
 # Example command line:
 bwa mem \
@@ -70,9 +70,9 @@ samtools view \
 samtools sort \
 -o kmer_monococcum_uniq_againstRef_ArinaLrFor.bam 
 ```
-Note: Only the A-subgenome was used as a reference. The same steps will be repeated, but mapping *T. urartu* k-mers to the bread wheat genome assembly
+Note: Only the A-subgenome was used as a reference. The same steps will be repeated, but mapping *T. urartu* *k-*mers to the bread wheat genome assembly
 
-7.	Analyze the depth of mapped k-mers in a 1 Mb non-overlapping genomic window for each species (we will be looking at introgressed segments with a mega-base resolution). For this, we used ```mosdepth``` (https://github.com/brentp/mosdepth).
+7.	Analyze the depth of mapped *k-*mers in a 1 Mb non-overlapping genomic window for each species (we will be looking at introgressed segments with a mega-base resolution). For this, we used ```mosdepth``` (https://github.com/brentp/mosdepth).
 
 ```sh
 # Example command line:
@@ -91,11 +91,11 @@ Author: J. Quiroz-Chavez, R. Ramirez-Gonzalez, C. Uauy.
 Date: 26/07/2022
 ```
 
-IBSpy is a k-mer based approach software that allows to detect introgressions at 50-kbp resolution. For details about how IBSpy detects variaitons, please, read the documentation [here](https://github.com/Uauy-Lab/IBSpy).\
-We used the 218 accesions of *T. monococcum* sequenced in this study as a query samples. On average all samples had ```~10-fold coverage```. We also included the the ten wheat genome assemblies (Walkowiak et al., 2020) and two chrosmosome-scale *T. monococcum* assemblies from this study. We included the assemblies, either as a reference or as query samples.
+IBSpy is a *k-*mer based approach software that allows to detect introgressions at 50-kbp resolution. For details about how IBSpy detects variaitons, please, read the documentation [here](https://github.com/Uauy-Lab/IBSpy).\
+We used the 218 accesions of *T. monococcum* sequenced in this study as a query samples. On average all samples had ```~10-fold coverage```. We also included the the ten wheat genome assemblies (Walkowiak et *al.,* 2020) and two chrosmosome-scale *T. monococcum* assemblies from this study. We included the assemblies, either as a reference or as query samples.
 
 
-1. Build k-mer databases.\
+1. Build *k-*mer databases.\
 We used kmc-3.0.1
 	* ```script: run_kmc.sh```
 - For genome assembly:
