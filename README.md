@@ -1,7 +1,8 @@
 
-# We used two methods to detect Introgressions from *T. monococcum* into domesticated wheat.
 
-Scripts used in the publication ***"Einkorn genomics sheds light on evolutionary history of the oldest domesticated wheat"***
+# Scripts used in the publication ***"Einkorn genomics sheds light on evolutionary history of the oldest domesticated wheat"***
+
+## We used two methods to detect Introgressions from *T. monococcum* into domesticated wheat.
 
 ## Our firts method involves a *k*-mer mapping based approach.
 ```
@@ -12,7 +13,7 @@ Input data used: whole-genome sequencing data from all domesticated einkorn acce
 
 
 1.	Count *k*-mers from each accession using ```jellyfish``` (https://github.com/gmarcais/Jellyfish).
-We used *k*-mer length of 51
+We used *k*-mer length of 51.
 
 ```sh
 # Example command line:
@@ -48,7 +49,7 @@ awk '!seen[$0]++' > all_kmers_moonococcum.txt
 # Example command line: 
 awk 'NR==FNR{a[$0];next}!($0 in a)' all_kmers_urartu.txt all_kmers_monococcum.txt > kmers_monococcum_uniq.txt
 ```
-The idea of obtaining unique *k*-mers is to exclude regions that are similar to *T. urartu* (the A-genome donor) 
+Obtaining unique *k*-mers from *T. monococcum* allows to exclude regions that are similar to *T. urartu* (the A-genome donor) 
 
 5.	Create fasta file from the list of *k*-mers
 
@@ -150,7 +151,7 @@ python3 combine_by_windows.py \
 -o reference_combined_queries_50000.tsv.gz
 ```
 
-The list below are examples of the ouput files, which  correspond to the variations tables of the whole genomem combined by reference. They are public available ``` here(link)```
+The list below are examples of the ouput files which correspond to the variations tables of the whole genome combined by reference. They are public available ``` here(link)```
 
 	- arinalrfor_combined_queries_50000w.tsv.gz
 	- chinese_combined_queries_50000w.tsv.gz
