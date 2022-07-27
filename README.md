@@ -30,13 +30,16 @@ jellyfish count \
 2)	Obtain k-mers sequences
 ```sh
 # Example command line: 
-jellyfish dump -L 2 -ct accession_51mer_count.jf > accession.dump.txt
+jellyfish dump \
+-L 2 \
+-ct accession_51mer_count.jf > accession.dump.txt
 ```
 
 3)	Concatenate all k-mers from all accessions per species (all domesticated einkorn, and all T. urartu, separately) and keep one representative of each k-mer
 ```sh
 # Example command line: 
-xargs awk '{print $1}' < list_accession_monococcum.txt | awk '!seen[$0]++' > all_kmers_moonococcum.txt
+xargs awk '{print $1}' < list_accession_monococcum.txt | \
+awk '!seen[$0]++' > all_kmers_moonococcum.txt
 ```
 
 4)	Obtain unique T. monococcum k-mers (i.e., k-mers present only on T. monococcum and not T. urartu)  – This step is repeated to obtain unique T. urartu k-mers
@@ -55,27 +58,35 @@ awk 'BEGIN{cont=0}{printf ">mer_%d\n",cont; print $0;cont++}' kmers_monococcum_u
 6)	Mapping k-mers to the bread wheat reference assembly
 ```sh
 # Example command line:
-bwa mem -t 16 -k 51 -T 51 -M ArinaLrFor_subgenomeA.fasta kmers_monococcum_uniq.fa | samtools view -bSh - | samtools sort -o kmer_monococcum_uniq_againstRef_ArinaLrFor.bam 
+bwa mem \
+-t 16 \
+-k 51 \
+-T 51 \
+-M ArinaLrFor_subgenomeA.fasta kmers_monococcum_uniq.fa | \
+samtools view \
+-bSh - | \
+samtools sort \
+-o kmer_monococcum_uniq_againstRef_ArinaLrFor.bam 
 ```
-Note: Only the A-subgenome was used as a reference.\
-The same step will be repeated but mapping T. urartu k-mers to the bread wheat genome assembly
+Note: Only the A-subgenome was used as a reference. The same step will be repeated but mapping T. urartu k-mers to the bread wheat genome assembly
 
 7)	Analyze the depth of mapped k-mers in a 1 Mb non-overlapping genomic window for each species (we will be looking at introgressed segments with a mega-base resolution)
 For this, we used mosdepth (https://github.com/brentp/mosdepth)
 ```sh
 # Example command line:
-mosdepth -t 16 --by ArinaLrFor_1mb.bed ./kmer_monococcum_againstRef_ArinaLrFor_depth_1Mb kmer_monococcum_uniq_againstRef_ArinaLrFor.bam
+mosdepth \
+-t 16 \
+--by ArinaLrFor_1mb.bed ./kmer_monococcum_againstRef_ArinaLrFor_depth_1Mb kmer_monococcum_uniq_againstRef_ArinaLrFor.bam
 ```
 ArinaLrFor_1mb.bed is a tab-delimited text file that defines the start and end of each genomic window.
 Example:
 chr1A	1	1000000
 
 
-## For our second approach we employed IBSpy (Identical By State in python). For details about how IBSpy detects variaitons, please, read the documentation [here](https://github.com/Uauy-Lab/IBSpy)
+## For our second approach we employed IBSpy (Identical By State in python).\
 
-As a query samples, we used XX accesions of XX.
-
-We employed a k-mer based approach to detect introgressions:
+IBSpy is a k-mer based approach software which allows to detect introgressions at 50-kbp resolution. For details about how IBSpy detects variaitons, please, read the documentation [here](https://github.com/Uauy-Lab/IBSpy).\
+We used the 218 accesions of T. monococcum sequenced in this study as a query samples. On average all samples had ```~10-fold coverage```
 
 
 1. Build k-mer databases.\
