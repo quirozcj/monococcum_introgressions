@@ -1,22 +1,29 @@
-```
-Author: Hanin Ahmed
-Date: 26/07/2021
-```
-# k-mer mapping based approach to detect introgressed region
 
+# We used two methods to detect Introgressions from T. monococcum into domesticated wheat.
+
+Scripts used in the publication " Title of the publication " 
+In this analysis we used the 10 pangenome chromosome level assemblies from the publication "10 pangenome paper".
+
+
+## Our firts method involves a k-mer mapping based approach to detect introgressed regions
+```
+Title: "*k-*mer mapping based approach to detect introgressed regions"
+Author: Hanin Ahmed
+Date: 26/07/2022
+```
 Input data used: whole-genome sequencing data from all domesticated einkorn accessions (61 T. monococcum accessions) and 30 T. urartu accessions from Zhou et al. (2020) https://www.nature.com/articles/s41588-020-00722-w: 
 
 
-1)	Count k-mer from each accession using jellyfish (https://github.com/gmarcais/Jellyfish)
-We are using k-mer length of 51
+1)	Count *k-*mer from each accession using jellyfish (https://github.com/gmarcais/Jellyfish)
+We used k-mer length of 51
 ```sh
-# Command line:
+# Example command line:
 zcat accession.fq.gz | jellyfish count -C -m 51 -s 3G -t 32  -o accession_51mer_count.jf /dev/fd/0
 ```
 
-2)	Obtain k-mers sequences
+2)	Obtain *k-*mers sequences
 ```sh
-# Command line: 
+# Example command line: 
 jellyfish dump -L 2 -ct accession_51mer_count.jf > accession.dump.txt
 ```
 
@@ -44,7 +51,7 @@ awk 'BEGIN{cont=0}{printf ">mer_%d\n",cont; print $0;cont++}' kmers_monococcum_u
 # Example command line:
 bwa mem -t 16 -k 51 -T 51 -M ArinaLrFor_subgenomeA.fasta kmers_monococcum_uniq.fa | samtools view -bSh - | samtools sort -o kmer_monococcum_uniq_againstRef_ArinaLrFor.bam 
 ```
-Note: Only the A-subgenome was used as a reference
+Note: Only the A-subgenome was used as a reference.\
 The same step will be repeated but mapping T. urartu k-mers to the bread wheat genome assembly
 
 7)	Analyze the depth of mapped k-mers in a 1 Mb non-overlapping genomic window for each species (we will be looking at introgressed segments with a mega-base resolution)
@@ -58,14 +65,12 @@ Example:
 chr1A	1	1000000
 
 
-# IBSpy: Analysis to detect Triticum monococcum introgressions in domesticated hexaploid wheat.
+## For our second approach we employed IBSpy (Identical By State in python). For details about how IBSpy detects variaitons, please, read the documentation [here](https://github.com/Uauy-Lab/IBSpy)
 
-Scripts used in the publication " Title of the publication " 
-
-In this analysis we used the 10 pangenome chromosome level assemblies from the publication "10 pangenome paper" plus Chinese Sprig genome assembly.
 As a query samples, we used XX accesions of XX.
 
 We employed a k-mer based approach to detect introgressions:
+
 
 1. Build k-mer databases.\
 We used kmc-3.0.1
@@ -88,7 +93,6 @@ kmc -k31 -ci1 -m30 -t5 -fq <(ls -d $in_dir/*.gz) accesion_id out_dir
 2. Detect variations.
 We employed IBSpy (IBSpy-0.3.1) to quantify variaitons per 50-kbp windows.
 	* ``` script: run_IBSpy.sh ```\
-For details about how IBSpy detects variaitons, please, read the documentation [here](https://github.com/Uauy-Lab/IBSpy)
 
 ```sh
 #example
