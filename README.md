@@ -1,7 +1,7 @@
 
 # We used two methods to detect Introgressions from T. monococcum into domesticated wheat.
 
-Scripts used in the publication ```Einkorn genomics sheds light on evolutionary history of the oldest domesticated wheat``` 
+Scripts used in the publication "Einkorn genomics sheds light on evolutionary history of the oldest domesticated wheat"***
 
 ## Our firts method involves a k-mer mapping based approach to detect introgressed regions
 ```
