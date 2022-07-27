@@ -8,10 +8,10 @@ Scripts used in the publication ***"Einkorn genomics sheds light on evolutionary
 Author: Hanin Ahmed
 Date: 26/07/2022
 ```
-Input data used: whole-genome sequencing data from all domesticated einkorn accessions (61 *T. monococcum* accessions) and 30 *T. urartu* accessions from Zhou et al. (2020) https://www.nature.com/articles/s41588-020-00722-w: 
+Input data used: whole-genome sequencing data from all domesticated einkorn accessions (61 *T. monococcum* accessions) and 30 *T. urartu* accessions from Zhou et al., (2020) https://www.nature.com/articles/s41588-020-00722-w: 
 
 
-1.	Count k-mer from each accession using jellyfish (https://github.com/gmarcais/Jellyfish).
+1.	Count k-mers from each accession using ```jellyfish``` (https://github.com/gmarcais/Jellyfish).
 We used k-mer length of 51
 
 ```sh
@@ -91,7 +91,7 @@ Author: J. Quiroz-Chavez, R. Ramirez-Gonzalez, C. Uauy.
 Date: 26/07/2022
 ```
 
-IBSpy is a k-mer based approach software which allows to detect introgressions at 50-kbp resolution. For details about how IBSpy detects variaitons, please, read the documentation [here](https://github.com/Uauy-Lab/IBSpy).\
+IBSpy is a k-mer based approach software that allows to detect introgressions at 50-kbp resolution. For details about how IBSpy detects variaitons, please, read the documentation [here](https://github.com/Uauy-Lab/IBSpy).\
 We used the 218 accesions of *T. monococcum* sequenced in this study as a query samples. On average all samples had ```~10-fold coverage```. We also included the the ten wheat genome assemblies (Walkowiak et al., 2020) and two chrosmosome-scale *T. monococcum* assemblies from this study. We included the assemblies, either as a reference or as query samples.
 
 
@@ -121,8 +121,8 @@ kmc -k31 \
 -fq <(ls -d $in_dir/*.gz) accesion_id out_dir
 ```
 
-2. Detect variations.
-We employed IBSpy (IBSpy-0.3.1) to quantify variaitons per 50-kbp windows.
+2. Detect variations.\
+We employed IBSpy (IBSpy-0.3.1) to quantify variaitons in 50-kbp windows.
 	* ``` script: run_IBSpy.sh ```
 
 ```sh
@@ -150,7 +150,7 @@ python3 combine_by_windows.py \
 -o reference_combined_queries_50000.tsv.gz
 ```
 
-The list below correspond to the variations tables combined by chrosmosome & reference which are public available ``` here(link)```
+The list below are examples of the ouput files, which  correspond to the variations tables of the whole genomem combined by reference. They are public available ``` here(link)```
 
 	- arinalrfor_combined_queries_50000w.tsv.gz
 	- chinese_combined_queries_50000w.tsv.gz
@@ -165,5 +165,6 @@ The list below correspond to the variations tables combined by chrosmosome & ref
 	- sy_mattis_combined_queries_50000w.tsv.gz
 
 4. Define monococcum introgressions.\
-To process downstream data and define introgressions we used a python & R notebook scripts.
-Please, see ``` monococcum_min_variations.ipynb ``` jupyther notebooks and R scripts for detailed description.
+To process downstream and plot introgressions across chromosomes, we used a python & R notebook scripts. Please, see ``` monococcum_min_variations.ipynb ``` jupyther notebooks, R scripts. For the full description about how the introgression were defined usign IBSpy, please see **Supplementary Note 2**.
+
+
