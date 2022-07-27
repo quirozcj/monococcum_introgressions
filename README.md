@@ -1,9 +1,7 @@
 
 # We used two methods to detect Introgressions from T. monococcum into domesticated wheat.
 
-Scripts used in the publication " Title of the publication " 
-In this analysis we used the 10 pangenome chromosome level assemblies from the publication "10 pangenome paper".
-
+Scripts used in the publication ```Einkorn genomics sheds light on evolutionary history of the oldest domesticated wheat``` 
 
 ## Our firts method involves a k-mer mapping based approach to detect introgressed regions
 ```
@@ -87,7 +85,7 @@ Example:
 chr1A	1	1000000
 
 
-## In our second approach we employed IBSpy (Identical By State in python).
+## In our second approach we employed IBSpy (Identity-by-State in python).
 ```
 Author: J. Quiroz-Chavez, R. Ramirez-Gonzalez, C. Uauy.
 Date: 26/07/2022
