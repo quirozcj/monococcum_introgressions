@@ -1,7 +1,7 @@
 
 # Analysis to detect *Triticum monococcum* into domesticated hexaploid wheat.
 
-Scripts used in the publication ***"Einkorn genomics sheds light on evolutionary history of the oldest domesticated wheat"***.
+Scripts used in the publication ***" title "***.
 
 ## We used two methods:
 ### A). Our firts method involves a *k*-mer mapping based approach.
