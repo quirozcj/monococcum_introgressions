@@ -38,11 +38,8 @@ declare -a queries_aln=(\
 	'lancer' \
 	'jagger' \
 	'chinese' \
-	'zavitan' \
 	'TA299' \
 	'TA10622' \
-	'urartu' \
-	'svevo' \
 	)
 
 declare -a queries_ibs=(\
@@ -56,11 +53,8 @@ declare -a queries_ibs=(\
 	'lancer-pg' \
 	'jagger-pg' \
 	'chinese-pg' \
-	'zavitan-pg' \
 	'TA299-pg' \
 	'TA10622-pg' \
-	'urartu-pg' \
-	'svevo-pg' \
 	)
 query_i=$(($i/10))
 query_aln=${queries_aln[$query_i]}

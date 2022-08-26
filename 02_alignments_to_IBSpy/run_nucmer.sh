@@ -32,11 +32,8 @@ declare -a names=(\
 	)
 
 declare -a queries=(\
-	"zavitan" \
-	"urartu" \
 	"TA299" \
 	"TA10622" \
-	"tibetan" \
 	)
 
 reference=${names[$x]}

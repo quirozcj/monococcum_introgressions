@@ -25,9 +25,6 @@ declare -a queries_aln=(\
 	'chinese' \
 	'TA299' \
 	'TA10622' \
-	'urartu' \
-	'svevo' \
-	'zavitan' \
 	)
 
 out_dir=../09_watseq/15_alignments_to_ibspy/mummer_rds_combined/

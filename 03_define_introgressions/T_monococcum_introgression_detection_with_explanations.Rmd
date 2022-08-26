@@ -12,7 +12,7 @@ library(ggplot2)
 library(dplyr) 
 library(tidyverse)
 
-# First bind all the chromosome data together. There are seven files, one per chromosome, using each of the bread wheat pangenomes (Walkowiak et al 2020) as the reference for the IBSpy pipeline. The variation files include the chromosome name (seqname), start and end of the 50-kbp window (based on the corresponding reference genome assembly), the minimum IBSpy variation value across the 218 T. monococcum accession and two assemblies (monoccoccum_min), the actual IBSpy variations for each of the 220 monococcum datasets, and then the IBSpy variation data for the pangenome cultivars. The code below is using cultivar Stanley as the reference.    
+# First bind all the chromosome data together. There are seven files, one per chromosome, using each of the bread wheat pangenomes (Walkowiak et al 2020) as the reference for the IBSpy pipeline. The variation files include the chromosome name (seqname), start and end of the 50-kbp window (based on the corresponding reference genome assembly), the minimum IBSpy variation value across the 218 T. monococcum accession and two assemblies (monococcum_min), the actual IBSpy variations for each of the 220 monococcum datasets, and then the IBSpy variation data for the pangenome cultivars. The code below is using cultivar Stanley as the reference.    
 
 
 setwd("W:\\quirozj\\09_watseq\\15_alignments_to_ibspy\\variations_tables\\stanley")
@@ -30,7 +30,7 @@ stanley_all = rbind(stanley_1A, stanley_2A, stanley_3A, stanley_4A, stanley_5A, 
 stanley_all$seqname <- as.factor(stanley_all$seqname)
 #stanley_all$start <- as.numeric(stanley_all$start)
 #stanley_all$end <- as.numeric(stanley_all$end)
-stanley_all$monoccoccum_min <- as.numeric(stanley_all$monoccoccum_min)
+stanley_all$monococcum_min <- as.numeric(stanley_all$monococcum_min)
 
 options(pillar.sigfig = 6)
 
@@ -44,10 +44,10 @@ tail(stanley_all)
 
 ```{r fig.width=15, fig.height=20, echo=FALSE, warning = FALSE,}
 
-# We generate a per chromosome view of T. monococcum introgressions based on the  'monoccoccum_min' <=30 criteria. 50-kbp windows with IBSpy variation values over 30 are coloured in blue/teal whereas those 50-kbp windows with values <=30 are coloured in purple. Note log2 scale on Y-axis. 
+# We generate a per chromosome view of T. monococcum introgressions based on the  'monococcum_min' <=30 criteria. 50-kbp windows with IBSpy variation values over 30 are coloured in blue/teal whereas those 50-kbp windows with values <=30 are coloured in purple. Note log2 scale on Y-axis. 
 
 
-stanley_all  %>%  mutate(Introgression = ifelse(monoccoccum_min <=30, "Yes", "No")) %>% ggplot(aes(x=start, y = monoccoccum_min, colour = Introgression)) + geom_jitter(width = 0.3, size=2, alpha=0.9) +  scale_y_continuous(trans='log2') + geom_hline(aes(yintercept = 30, color = '30')) + geom_hline(aes(yintercept = 120, color = '120')) + labs(title="monococcum introgressions in stanley (<=30 variations)",x ="Mbp", y = "variations (log2)") + facet_grid(seqname ~ .)
+stanley_all  %>%  mutate(Introgression = ifelse(monococcum_min <=30, "Yes", "No")) %>% ggplot(aes(x=start, y = monococcum_min, colour = Introgression)) + geom_jitter(width = 0.3, size=2, alpha=0.9) +  scale_y_continuous(trans='log2') + geom_hline(aes(yintercept = 30, color = '30')) + geom_hline(aes(yintercept = 120, color = '120')) + labs(title="monococcum introgressions in stanley (<=30 variations)",x ="Mbp", y = "variations (log2)") + facet_grid(seqname ~ .)
 
 
 ```
@@ -69,23 +69,23 @@ assign_blocks <-function(df, threshold){
   block_no = 1
 
   for (i in seq(1, nrow(df))){
-    if(df[i, "monoccoccum_min"] > threshold){
+    if(df[i, "monococcum_min"] > threshold){
       df[i, "block_no"] <- NA}
 
-  else if (df[i, "monoccoccum_min"] <= threshold){
+  else if (df[i, "monococcum_min"] <= threshold){
     df[i, "block_no"] <- block_no
       if (i > (nrow(df)-9)){}
 
   else if (
-        (df[i+1, "monoccoccum_min"] > threshold) &
-        (df[i+2, "monoccoccum_min"] > threshold) & 
-        (df[i+3, "monoccoccum_min"] > threshold) &
-        (df[i+4, "monoccoccum_min"] > threshold) &
-        (df[i+5, "monoccoccum_min"] > threshold) & 
-        (df[i+6, "monoccoccum_min"] > threshold) &
-        (df[i+7, "monoccoccum_min"] > threshold) &
-        (df[i+8, "monoccoccum_min"] > threshold) &
-        (df[i+9, "monoccoccum_min"] > threshold) 
+        (df[i+1, "monococcum_min"] > threshold) &
+        (df[i+2, "monococcum_min"] > threshold) & 
+        (df[i+3, "monococcum_min"] > threshold) &
+        (df[i+4, "monococcum_min"] > threshold) &
+        (df[i+5, "monococcum_min"] > threshold) & 
+        (df[i+6, "monococcum_min"] > threshold) &
+        (df[i+7, "monococcum_min"] > threshold) &
+        (df[i+8, "monococcum_min"] > threshold) &
+        (df[i+9, "monococcum_min"] > threshold) 
         ){
         block_no <- block_no + 1
       }
@@ -106,7 +106,7 @@ head(stanley_30_blocks)
 ```{r fig.width=15, fig.height=20, echo=FALSE, warning = FALSE,}
 
 # Filter file based on windows with variations <=30
-stanley_30 <- stanley_30_blocks %>% filter(monoccoccum_min <=30) 
+stanley_30 <- stanley_30_blocks %>% filter(monococcum_min <=30) 
 
 # Output file with the chromosome, start and end, and length of the introgression blocks as defined by the formula above.  
 stanley_30$start <- as.numeric(stanley_30$start)
@@ -118,7 +118,7 @@ stanley_30 %>% group_by(block_no) %>% summarise(Start = min(start), End = (max(s
 
 # Move "block_no" column to the start and then pivot longer to make a long file
 stanley_30$start <- as.factor(stanley_30$start)
-stanley_30_long <- stanley_30 %>% relocate(block_no, .after=monoccoccum_min) %>%  pivot_longer(cols = c(6:248), names_to = 'genotype', values_to = 'variations')  
+stanley_30_long <- stanley_30 %>% relocate(block_no, .after=monococcum_min) %>%  pivot_longer(cols = c(6:248), names_to = 'genotype', values_to = 'variations')  
 
 
 # Read in two previous files and also the "mono_clade.csv" file which has the assignment of the monococcum accessions to each clade based on the STRUCTURE and phylogeny analysis. 

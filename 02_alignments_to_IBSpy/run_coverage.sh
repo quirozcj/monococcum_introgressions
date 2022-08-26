@@ -25,9 +25,6 @@ declare -a queries_aln=(\
 	'chinese' \
 	'TA299' \
 	'TA10622' \
-	'urartu' \
-	'svevo' \
-	'zavitan' \
 	)
 
 window=500000

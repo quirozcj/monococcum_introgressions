@@ -1,7 +1,7 @@
 
-# Analysis to detect *Triticum monococcum* into domesticated hexaploid wheat.
+# Analysis to detect *Triticum monococcum* introgressions into domesticated hexaploid wheat.
 
-Scripts used in the publication ***" title "***.
+Scripts used in the publication ***"Einkorn genomics sheds light on evolutionary history of the oldest domesticated wheat"***.
 
 ## We used two methods:
 ### A). Our firts method involves a *k*-mer mapping based approach.
@@ -16,7 +16,7 @@ Input data used: whole-genome sequencing data from all domesticated einkorn acce
 We used *k*-mer length of 51.
 
 ```sh
-# Example command line:
+# Example:
 zcat accession.fq.gz | \
 jellyfish count \
 -C \
@@ -29,7 +29,7 @@ jellyfish count \
 2.	Obtain *k*-mers sequences and remove unique.
 
 ```sh
-# Example command line: 
+# Example: 
 jellyfish dump \
 -L 2 \
 -ct accession_51mer_count.jf > accession.dump.txt
@@ -38,7 +38,7 @@ jellyfish dump \
 3.	Concatenate all *k*-mers from all accessions per species (all domesticated einkorn, and all *T. urartu*, separately) and keep one representative of each *k*-mer
 
 ```sh
-# Example command line: 
+# Example: 
 xargs awk '{print $1}' < list_accession_monococcum.txt | \
 awk '!seen[$0]++' > all_kmers_moonococcum.txt
 ```
@@ -46,7 +46,7 @@ awk '!seen[$0]++' > all_kmers_moonococcum.txt
 4.	Obtain unique *T. monococcum* *k*-mers (i.e., *k*-mers present only on *T. monococcum* and not *T. urartu*)  – This step is repeated to obtain unique *T. urartu* *k*-mers
 
 ```sh
-# Example command line: 
+# Example:
 awk 'NR==FNR{a[$0];next}!($0 in a)' all_kmers_urartu.txt all_kmers_monococcum.txt > kmers_monococcum_uniq.txt
 ```
 Obtaining unique *k*-mers from *T. monococcum* allows to exclude regions that are similar to *T. urartu* (the A-genome donor) 
@@ -54,13 +54,13 @@ Obtaining unique *k*-mers from *T. monococcum* allows to exclude regions that ar
 5.	Create fasta file from the list of *k*-mers
 
 ```sh
-# Example command line to create fasta file for *T. monococcum*:
+# Example to create fasta file for *T. monococcum*:
 awk 'BEGIN{cont=0}{printf ">mer_%d\n",cont; print $0;cont++}' kmers_monococcum_uniq.txt > kmers_monococcum_uniq.fa
 ```
 
 6.	Mapping *k*-mers to the bread wheat reference assembly
 ```sh
-# Example command line:
+# Example:
 bwa mem \
 -t 16 \
 -k 51 \
@@ -76,7 +76,7 @@ Note: Only the A-subgenome was used as a reference. The same steps will be repea
 7.	Analyze the depth of mapped *k*-mers in a 1 Mb non-overlapping genomic window for each species (we will be looking at introgressed segments with a mega-base resolution). For this, we used ```mosdepth``` (https://github.com/brentp/mosdepth).
 
 ```sh
-# Example command line:
+# Example:
 mosdepth \
 -t 16 \
 --by ArinaLrFor_1mb.bed ./kmer_monococcum_againstRef_ArinaLrFor_depth_1Mb kmer_monococcum_uniq_againstRef_ArinaLrFor.bam
@@ -92,7 +92,7 @@ Author: J. Quiroz-Chavez, R. Ramirez-Gonzalez, C. Uauy.
 Date: 26/07/2022
 ```
 
-IBSpy is a *k*-mer based software that allows to detect introgressions at 50-kbp resolution. For details about how IBSpy detects variaitons, please, read the documentation [here](https://github.com/Uauy-Lab/IBSpy).\
+IBSpy is a *k*-mer based software that allows to detect introgressions at 50-kbp resolution. For details about how IBSpy detects variations, please, read the documentation [here](https://github.com/Uauy-Lab/IBSpy).\
 We used the 218 accesions of *T. monococcum* sequenced in this study as a query samples. On average all samples had ```~10-fold coverage```. We also included the ten wheat genome assemblies (Walkowiak *et al.,* 2020) and two chrosmosome-scale *T. monococcum* assemblies from this study. We included the assemblies, either as a reference or as query samples.
 
 
@@ -167,5 +167,3 @@ The list below are examples of the ouput files which correspond to the variation
 
 4. Define monococcum introgressions.\
 To process downstream and plot introgressions across chromosomes we used a python & R notebook scripts. Please, see ``` monococcum_min_variations.ipynb ``` jupyther notebooks & R scripts. For the full description about how the introgressions were defined usign IBSpy, please see **Supplementary Note 2**.
-
-
