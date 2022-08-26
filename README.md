@@ -6,7 +6,7 @@ Scripts used in the publication ***"Einkorn genomics sheds light on evolutionary
 ## We used two methods:
 ### A). Our firts method involves a *k*-mer mapping based approach.
 ```
-Author: Hanin Ahmed
+Author: H. Ahmed
 Date: 26/07/2022
 ```
 Input data used: whole-genome sequencing data from all domesticated einkorn accessions (61 *T. monococcum* accessions) and 30 *T. urartu* accessions from Zhou *et al.,* (2020) https://www.nature.com/articles/s41588-020-00722-w: 
@@ -88,7 +88,7 @@ chr1A	1	1000000
 
 ### B). In our second approach we employed IBSpy (Identity-by-State in python).
 ```
-Author: J. Quiroz-Chavez, R. Ramirez-Gonzalez, C. Uauy.
+Author: H. Ahmed, J. Quiroz-Chavez, R. Ramirez-Gonzalez, C. Uauy, S. Krattinger
 Date: 26/07/2022
 ```
 
@@ -99,19 +99,17 @@ We used the 218 accesions of *T. monococcum* sequenced in this study as a query 
 1. Build *k*-mer databases.\
 We used kmc-3.0.1
 	* ```script: run_kmc.sh```
-- For genome assembly:
+- Example for genome assembly:
 
 ```sh
-# Example for genome assembly
 kmc -k31 \
 -ci1 \
 -m30 \
 -t5 \
 -fm assembly_id.fa assembly_id out_dir
 ```
-- For raw reads:
+- Example for raw reads:
 ```sh
-# Example for raw reads
 accesion_id='accesion1'
 in_dir=../${accesion_id}
 
