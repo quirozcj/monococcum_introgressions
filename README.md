@@ -4,7 +4,7 @@
 Scripts used in the publication ***"Einkorn genomics sheds light on evolutionary history of the oldest domesticated wheat"***.
 
 ## We used two methods:
-### A). Our firts method involves a *k*-mer mapping based approach.
+### A). Our first method involves a *k*-mer mapping based approach.
 ```
 Author: H. Ahmed
 Date: 26/07/2022
@@ -93,7 +93,7 @@ Date: 26/07/2022
 ```
 
 IBSpy is a *k*-mer based software that allows to detect introgressions at 50-kbp resolution. For details about how IBSpy detects variations, please, read the documentation [here](https://github.com/Uauy-Lab/IBSpy).\
-We used the 218 accesions of *T. monococcum* sequenced in this study as a query samples. On average all samples had ```~10-fold coverage```. We also included the ten wheat genome assemblies (Walkowiak *et al.,* 2020) and two chrosmosome-scale *T. monococcum* assemblies from this study. We included the assemblies, either as a reference or as query samples.
+We used the 218 accessions of *T. monococcum* sequenced in this study as a query samples. On average all samples had ```~10-fold coverage```. We also included the ten wheat genome assemblies (Walkowiak *et al.,* 2020) and two chromosome-scale *T. monococcum* assemblies from this study. We included the assemblies, either as a reference or as query samples.
 
 
 1. Build *k*-mer databases.\
@@ -121,7 +121,7 @@ kmc -k31 \
 ```
 
 2. Detect variations.\
-We employed IBSpy (IBSpy-0.3.1) to quantify variaitons in 50-kbp windows.
+We employed IBSpy (IBSpy-0.3.1) to quantify variations in 50-kbp windows.
 	* ``` script: run_IBSpy.sh ```
 
 ```sh
@@ -137,7 +137,7 @@ IBSpy --kmer_size 31 \
 
 3. Combine IBSpy output tables by window & reference.\
 	* ```script: run_combine.sh```\
-	This is to proccess a single table in downstream analysis. The script requres a metadata file with the name of the individual IBSpy output files with their corresponding names. See the ```metadata.tsv``` example. All the  indiviual files will be combined by reference at arbitrary windows size.
+	This is to process a single table in downstream analysis. The script requires a metadata file with the name of the individual IBSpy output files with their corresponding names. See the ```metadata.tsv``` example. All the individual files will be combined by reference at arbitrary windows size.
 
 ```sh
 # Example
@@ -149,7 +149,7 @@ python3 combine_by_windows.py \
 -o reference_combined_queries_50000.tsv.gz
 ```
 
-The list below are examples of the ouput files which correspond to the variations tables of the whole genome combined by reference. They are public available ``` here(link)```
+The list below are examples of the output files which correspond to the variations tables of the whole genome combined by reference. They are publicly available ``` here(link)```
 
 	- arinalrfor_combined_queries_50000w.tsv.gz
 	- chinese_combined_queries_50000w.tsv.gz
@@ -164,4 +164,4 @@ The list below are examples of the ouput files which correspond to the variation
 	- sy_mattis_combined_queries_50000w.tsv.gz
 
 4. Define monococcum introgressions.\
-To process downstream and plot introgressions across chromosomes we used a python & R notebook scripts. Please, see ``` monococcum_min_variations.ipynb ``` jupyther notebooks & R scripts. For the full description about how the introgressions were defined usign IBSpy, please see **Supplementary Note 2**.
+To process downstream and plot introgressions across chromosomes we used a python & R notebook scripts. Please, see ``` monococcum_min_variations.ipynb ``` jupyter notebooks & R scripts. For the full description about how the introgressions were defined using IBSpy, please see **Supplementary Note 2**.
