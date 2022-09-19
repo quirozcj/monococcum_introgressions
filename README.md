@@ -93,9 +93,14 @@ Date: 26/07/2022
 ```
 
 IBSpy is a *k*-mer based software that allows to detect introgressions at 50-kbp resolution. For details about how IBSpy detects variations, please, read the documentation [here](https://github.com/Uauy-Lab/IBSpy).\
+
+![image](IBSpy_variation.png)
+
+```In brief, using 50 kbp windows, we compared k-mers in a reference sequence to the k-mers of any query sample (raw reads or assemblies) and count the number of variations within each window. A variation is defined as a set of continuous overlapping k-mers (k = 3 in this example) from the reference completely absent in the query. Low variations count indicates high similarity between the 50 kbp reference window in the assembly and the query sample, whereas high variation counts indicate low sequence similarities.```
+
+
 We used the 218 accessions of *T. monococcum* sequenced in this study as a query samples. On average all samples had ```~10-fold coverage```. We also included the ten wheat genome assemblies (Walkowiak *et al.,* 2020) and two chromosome-scale *T. monococcum* assemblies from this study. We included the assemblies, either as a reference or as query samples.
 
-![What is this](IBSpy_variation.png)
 
 
 1. Build *k*-mer databases.\
