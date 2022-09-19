@@ -95,6 +95,8 @@ Date: 26/07/2022
 IBSpy is a *k*-mer based software that allows to detect introgressions at 50-kbp resolution. For details about how IBSpy detects variations, please, read the documentation [here](https://github.com/Uauy-Lab/IBSpy).\
 We used the 218 accessions of *T. monococcum* sequenced in this study as a query samples. On average all samples had ```~10-fold coverage```. We also included the ten wheat genome assemblies (Walkowiak *et al.,* 2020) and two chromosome-scale *T. monococcum* assemblies from this study. We included the assemblies, either as a reference or as query samples.
 
+![What is this](IBSpy_variation.png)
+
 
 1. Build *k*-mer databases.\
 We used kmc-3.0.1
