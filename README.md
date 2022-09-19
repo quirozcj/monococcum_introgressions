@@ -92,11 +92,11 @@ Author: H. Ahmed, J. Quiroz-Chavez, R. Ramirez-Gonzalez, C. Uauy, S. Krattinger
 Date: 26/07/2022
 ```
 
-IBSpy is a *k*-mer based software that allows to detect introgressions at 50-kbp resolution. For details about how IBSpy detects variations, please, read the documentation [here](https://github.com/Uauy-Lab/IBSpy).
+IBSpy is a *k*-mer based software that allows to detect introgressions at 50 kbp resolution. For details about how IBSpy detects variations, please, read the documentation [here](https://github.com/Uauy-Lab/IBSpy).
 
 ![image](IBSpy_variation.png)
 
-*In brief, using 50 kbp windows, we compared k-mers in a reference sequence to the k-mers of any query sample (raw reads or assemblies) and count the number of variations within each window. A variation is defined as a set of continuous overlapping k-mers (k = 3 in the example above, but our the routine analysis we use k = 31) from the reference completely absent in the query. Low variations count indicates high similarity between the 50 kbp reference window in the assembly and the query sample, whereas high variation counts indicate low sequence similarities.*
+*In brief, using 50 kbp windows, we compare k-mers in a reference sequence to the k-mers of any query sample (from raw reads, scaffold-level, or chromosome-scale assemblies) and count the number of variations within each window. A variation is defined as a set of continuous overlapping k-mers (k = 3 in this example, however in the routine analysis, we use k = 31) from the reference completely absent in the query. In our example above, a single variation of 5-bp length is shown, which is the condensed sequence of the three k-mers having the A nucleotide (in yellow) not present in the k-mers of the query sample from raw reads. After recording this variation, IBSpy continues to scan the sequence of the reference across the 50 kbp window until a new set of continuous overlapping k-mers are absent in the query sample. At the end of the 50 kbp window, the reference chromosome position and the total number of variations are recorded before moving to the next 50 kbp window and the process is repeated. Low variations count indicates high similarity between the 50 kbp reference window in the assembly and the query sample, whereas high variation counts indicate low sequence similarities..*
 
 
 We used the 218 accessions of *T. monococcum* sequenced in this study as a query samples. On average all samples had ```~10-fold coverage```. We also included the ten wheat genome assemblies (Walkowiak *et al.,* 2020) and two chromosome-scale *T. monococcum* assemblies from this study. We included the assemblies, either as a reference or as query samples.
@@ -127,7 +127,7 @@ kmc -k31 \
 ```
 
 2. Detect variations.\
-We employed IBSpy (IBSpy-0.3.1) to quantify variations in 50-kbp windows.
+We employed IBSpy (IBSpy-0.3.1) to quantify variations in 50 kbp windows.
 	* ``` script: run_IBSpy.sh ```
 
 ```sh
